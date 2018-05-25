@@ -82,7 +82,7 @@ class AutoContributeGenerator(private val descriptor: AutoContributeDescriptor) 
     }
 
     private fun bindsMethod(type: ClassName): MethodSpec {
-        return MethodSpec.methodBuilder("bindTo${type.simpleName()}")
+        return MethodSpec.methodBuilder("bind${type.simpleName()}")
             .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
             .addAnnotation(Binds::class.java)
             .addParameter(descriptor.target, descriptor.target.simpleName().toLowerCaseCamel())

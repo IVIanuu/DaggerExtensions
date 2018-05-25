@@ -3,6 +3,7 @@ package com.ivianuu.daggerextensions.sample.child
 import android.content.Context
 import android.support.v4.app.Fragment
 import com.ivianuu.daggerextensions.AutoContribute
+import com.ivianuu.daggerextensions.MyBindingModule
 import com.ivianuu.daggerextensions.sample.deps.ActivityDependency
 import com.ivianuu.daggerextensions.sample.deps.ChildFragmentDependency
 import com.ivianuu.daggerextensions.sample.deps.FragmentDependency
@@ -15,6 +16,7 @@ import javax.inject.Inject
  * @author Manuel Wrage (IVIanuu)
  */
 
+@MyBindingModule
 @AutoContribute(modules = [MainFragmentBuilder::class])
 class OtherChildFragment : Fragment()
 
