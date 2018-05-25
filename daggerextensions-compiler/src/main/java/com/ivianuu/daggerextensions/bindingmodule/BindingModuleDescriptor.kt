@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.daggerextensions.autocontribute
+package com.ivianuu.daggerextensions.bindingmodule
 
 import com.ivianuu.daggerextensions.util.Module
 import com.squareup.javapoet.ClassName
@@ -34,7 +34,7 @@ data class BindingModuleDescriptor(
         private val bindingModule: ClassName
     ) {
 
-        val modules = mutableSetOf<Module>()
+        private val modules = mutableSetOf<Module>()
 
         fun addModule(module: Module): Builder {
             modules.add(module)

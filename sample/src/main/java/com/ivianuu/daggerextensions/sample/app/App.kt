@@ -28,8 +28,8 @@ import javax.inject.Singleton
         SalamiPizzaModule_::class,
         SpotifyMediaPlayerModule_::class,
         SoundCloudMediaPlayerModule_::class,
-        LoggerModule::class,
-        TranslatorModule::class,
+        LoggerModule_::class,
+        TranslatorModule_::class,
         ServiceBindingModule_::class
     ],
     injects = [GlideConfig::class],

@@ -37,7 +37,7 @@ fun writeFile(env: ProcessingEnvironment, file: JavaFile) {
     try {
         file.writeTo(env.filer)
     } catch (e: IOException) {
-        env.e { "unable to write file $file, ${e.message}" }
+        //env.e { "unable to write file $file, ${e.message}" }
     }
 
 }

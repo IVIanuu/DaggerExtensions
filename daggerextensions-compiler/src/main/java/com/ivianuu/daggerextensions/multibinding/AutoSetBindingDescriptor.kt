@@ -17,7 +17,6 @@
 package com.ivianuu.daggerextensions.multibinding
 
 import com.squareup.javapoet.ClassName
-import javax.lang.model.type.TypeMirror
 
 /**
  * @author Manuel Wrage (IVIanuu)
@@ -25,30 +24,5 @@ import javax.lang.model.type.TypeMirror
 data class AutoSetBindingDescriptor(
     val type: ClassName,
     val moduleName: ClassName,
-    val items: Set<ClassName>
-) {
-
-    class Builder(
-        private val type: ClassName,
-        private val moduleName: ClassName
-    ) {
-
-        private val items = mutableSetOf<ClassName>()
-
-        fun addItem(item: String): Builder {
-            items.add(ClassName.bestGuess(item))
-            return this
-        }
-
-        fun build(): AutoSetBindingDescriptor {
-            return AutoSetBindingDescriptor(type, moduleName, items)
-        }
-    }
-
-    companion object {
-        fun builder(type: String, moduleName: ClassName): Builder {
-            val baseTypeName = ClassName.bestGuess(type)
-            return Builder(baseTypeName, moduleName)
-        }
-    }
-}
+    val itemName: ClassName
+)

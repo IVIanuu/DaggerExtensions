@@ -16,7 +16,6 @@
 
 package com.ivianuu.daggerextensions.multibinding
 
-import com.google.auto.common.AnnotationMirrors
 import com.squareup.javapoet.ClassName
 import javax.lang.model.element.AnnotationMirror
 
@@ -26,30 +25,6 @@ import javax.lang.model.element.AnnotationMirror
 data class AutoMapBindingDescriptor(
     val type: ClassName,
     val moduleName: ClassName,
-    val items: Map<AnnotationMirror, ClassName>
-) {
-
-    class Builder(
-        private val type: ClassName,
-        private val moduleName: ClassName
-    ) {
-
-        private val items = mutableMapOf<AnnotationMirror, ClassName>()
-
-        fun putItem(key: AnnotationMirror, item: String): Builder {
-            items[key] = ClassName.bestGuess(item)
-            return this
-        }
-
-        fun build(): AutoMapBindingDescriptor {
-            return AutoMapBindingDescriptor(type, moduleName, items)
-        }
-    }
-
-    companion object {
-        fun builder(type: String, moduleName: ClassName): Builder {
-            val baseTypeName = ClassName.bestGuess(type)
-            return Builder(baseTypeName, moduleName)
-        }
-    }
-}
+    val mapKey: AnnotationMirror,
+    val itemName: ClassName
+)

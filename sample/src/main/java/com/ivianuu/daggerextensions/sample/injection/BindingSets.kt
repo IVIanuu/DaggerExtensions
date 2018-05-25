@@ -14,24 +14,15 @@
  * limitations under the License.
  */
 
-package com.ivianuu.daggerextensions.sample.multibinding
+package com.ivianuu.daggerextensions.sample.injection
 
-import com.ivianuu.daggerextensions.AutoBindsIntoMap
-import com.ivianuu.daggerextensions.BindingModule
-import com.ivianuu.daggerextensions.key.AutoStringKey
-import javax.inject.Inject
+import android.app.Activity
+import android.support.v4.app.FragmentActivity
+import android.support.v7.app.AppCompatActivity
+import com.ivianuu.daggerextensions.BindingSet
 
-@BindingModule
-annotation class TranslatorModule
-
-interface Translator
-
-@TranslatorModule
-@AutoStringKey("german")
-@AutoBindsIntoMap(Translator::class)
-class GermanTranslator @Inject constructor() : Translator
-
-@TranslatorModule
-@AutoStringKey("english")
-@AutoBindsIntoMap(Translator::class)
-class EnglishTranslator @Inject constructor() : Translator
+/**
+ * @author Manuel Wrage (IVIanuu)
+ */
+@BindingSet([Activity::class, FragmentActivity::class, AppCompatActivity::class])
+annotation class ActivityBindingSet

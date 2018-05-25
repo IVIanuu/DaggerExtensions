@@ -14,24 +14,19 @@
  * limitations under the License.
  */
 
-package com.ivianuu.daggerextensions.sample.multibinding
+package com.ivianuu.daggerextensions.util
 
-import com.ivianuu.daggerextensions.AutoBindsIntoMap
-import com.ivianuu.daggerextensions.BindingModule
-import com.ivianuu.daggerextensions.key.AutoStringKey
-import javax.inject.Inject
+import com.squareup.javapoet.ClassName
+import javax.lang.model.element.Element
 
-@BindingModule
-annotation class TranslatorModule
+fun Element.intoSetName(): ClassName {
+    return ClassName.bestGuess(asType().toString() + "IntoSet")
+}
 
-interface Translator
+fun Element.intoMapName(): ClassName {
+    return ClassName.bestGuess(asType().toString() + "IntoMap")
+}
 
-@TranslatorModule
-@AutoStringKey("german")
-@AutoBindsIntoMap(Translator::class)
-class GermanTranslator @Inject constructor() : Translator
-
-@TranslatorModule
-@AutoStringKey("english")
-@AutoBindsIntoMap(Translator::class)
-class EnglishTranslator @Inject constructor() : Translator
+fun Element.autoContributeName(): ClassName {
+    return ClassName.bestGuess(asType().toString() + "Builder")
+}

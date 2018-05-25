@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.daggerextensions.autocontribute
+package com.ivianuu.daggerextensions.bindingmodule
 
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.JavaFile

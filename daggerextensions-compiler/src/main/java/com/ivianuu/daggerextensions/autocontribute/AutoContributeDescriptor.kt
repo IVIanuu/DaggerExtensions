@@ -29,7 +29,6 @@ data class AutoContributeDescriptor(
     val element: Element,
     val target: ClassName,
     val builder: ClassName,
-    val bindingModules: Set<AnnotationMirror>,
     val modules: Set<Module>,
     val scopes: Set<AnnotationMirror>,
     val bindings: Set<ClassName>,
@@ -43,15 +42,9 @@ data class AutoContributeDescriptor(
         val bindingsModule: ClassName
     ) {
 
-        val bindingModules = mutableSetOf<AnnotationMirror>()
         private val modules = mutableSetOf<Module>()
         private val scopes = mutableSetOf<AnnotationMirror>()
         private val bindings = mutableSetOf<ClassName>()
-        
-        fun addBindingModule(module: AnnotationMirror): Builder {
-            bindingModules.add(module)
-            return this
-        }
 
         fun addModule(module: Module): Builder {
             modules.add(module)
@@ -73,7 +66,6 @@ data class AutoContributeDescriptor(
                 element,
                 target,
                 builder,
-                bindingModules,
                 modules,
                 scopes,
                 bindings,

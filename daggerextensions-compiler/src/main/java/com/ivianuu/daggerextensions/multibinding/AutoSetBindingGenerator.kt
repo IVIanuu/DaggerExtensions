@@ -17,7 +17,6 @@
 package com.ivianuu.daggerextensions.multibinding
 
 import com.ivianuu.daggerextensions.util.toLowerCaseCamel
-import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.JavaFile
 import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.TypeSpec
@@ -35,19 +34,18 @@ class AutoSetBindingGenerator(private val descriptor: AutoSetBindingDescriptor) 
         val module = TypeSpec.classBuilder(descriptor.moduleName)
             .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
             .addAnnotation(Module::class.java)
-
-        descriptor.items.forEach { module.addMethod(bindsMethod(it)) }
+            .addMethod(bindsMethod())
 
         return JavaFile.builder(descriptor.moduleName.packageName(), module.build())
             .build()
     }
 
-    private fun bindsMethod(item: ClassName): MethodSpec {
-        return MethodSpec.methodBuilder("bind${item.simpleName()}")
+    private fun bindsMethod(): MethodSpec {
+        return MethodSpec.methodBuilder("bind${descriptor.itemName.simpleName()}")
             .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
             .addAnnotation(Binds::class.java)
             .addAnnotation(IntoSet::class.java)
-            .addParameter(item, item.simpleName().toLowerCaseCamel())
+            .addParameter(descriptor.itemName, descriptor.itemName.simpleName().toLowerCaseCamel())
             .returns(descriptor.type)
             .build()
     }

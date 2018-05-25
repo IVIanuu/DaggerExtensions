@@ -21,7 +21,6 @@ import com.google.auto.common.BasicAnnotationProcessor
 import com.google.auto.common.MoreElements
 import com.google.common.collect.SetMultimap
 import com.ivianuu.daggerextensions.AutoContribute
-import com.ivianuu.daggerextensions.BindingModule
 import com.ivianuu.daggerextensions.BindsTypes
 import com.ivianuu.daggerextensions.util.Module
 import com.ivianuu.daggerextensions.util.getClassArrayValues
@@ -31,7 +30,6 @@ import com.squareup.javapoet.ClassName
 import javax.annotation.processing.ProcessingEnvironment
 import javax.inject.Scope
 import javax.lang.model.element.Element
-import javax.lang.model.element.Modifier
 import javax.lang.model.element.TypeElement
 
 /**
@@ -47,18 +45,10 @@ class AutoContributeProcessingStep(
             .map(this::createAutoContributer)
             .toSet()
 
-        val bindingModules =
-            collectBindingModules(autoContributions)
-
         autoContributions
             .map(AutoContributeDescriptor.Builder::build)
             .map(::AutoContributeGenerator)
             .map(AutoContributeGenerator::generate)
-            .forEach { writeFile(processingEnv, it) }
-
-        bindingModules
-            .map(::BindingModuleGenerator)
-            .map(BindingModuleGenerator::generate)
             .forEach { writeFile(processingEnv, it) }
 
         return mutableSetOf()
@@ -76,10 +66,6 @@ class AutoContributeProcessingStep(
             ?.getClassArrayValues("types")
             ?.forEach { builder.addBinding(it) }
 
-        // binding modules
-        AnnotationMirrors.getAnnotatedAnnotations(element, BindingModule::class.java)
-            .forEach { builder.addBindingModule(it) }
-
         // scopes
         AnnotationMirrors.getAnnotatedAnnotations(element, Scope::class.java)
             .forEach { builder.addScope(it) }
@@ -90,37 +76,11 @@ class AutoContributeProcessingStep(
         annotation.getClassArrayValues(
             "modules")
             .map {
-                processingEnv.n { "test test $it" }
                 val moduleType = processingEnv.elementUtils.getTypeElement(it)
                 Module(ClassName.get(moduleType), moduleType.modifiers)
             }
             .forEach { builder.addModule(it) }
 
         return builder
-    }
-
-    private fun collectBindingModules(autoContributions: Set<AutoContributeDescriptor.Builder>): Set<BindingModuleDescriptor> {
-        val builders =
-            mutableMapOf<String, BindingModuleDescriptor.Builder>()
-
-        autoContributions
-            .forEach { builderClass ->
-                val builderBindingModules = builderClass.bindingModules
-
-                builderBindingModules.forEach { bindingModule ->
-                    val bindingModuleBuilder =
-                        builders.getOrPut(bindingModule.annotationType.toString()) {
-                            BindingModuleDescriptor.builder(bindingModule)
-                        }
-
-                    bindingModuleBuilder.addModule(
-                        Module(builderClass.builder, setOf(Modifier.PUBLIC, Modifier.ABSTRACT))
-                    )
-                }
-            }
-
-        return builders.values
-            .map { it.build() }
-            .toSet()
     }
 }

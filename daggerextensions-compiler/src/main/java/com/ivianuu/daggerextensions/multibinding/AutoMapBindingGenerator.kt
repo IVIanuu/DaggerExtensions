@@ -17,12 +17,13 @@
 package com.ivianuu.daggerextensions.multibinding
 
 import com.ivianuu.daggerextensions.util.toLowerCaseCamel
-import com.squareup.javapoet.*
+import com.squareup.javapoet.AnnotationSpec
+import com.squareup.javapoet.JavaFile
+import com.squareup.javapoet.MethodSpec
+import com.squareup.javapoet.TypeSpec
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
-import dagger.multibindings.IntoSet
-import javax.lang.model.element.AnnotationMirror
 import javax.lang.model.element.Modifier
 
 /**
@@ -34,20 +35,19 @@ class AutoMapBindingGenerator(private val descriptor: AutoMapBindingDescriptor) 
         val module = TypeSpec.classBuilder(descriptor.moduleName)
             .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
             .addAnnotation(Module::class.java)
-
-        descriptor.items.forEach { module.addMethod(bindsMethod(it.key, it.value)) }
+            .addMethod(bindsMethod())
 
         return JavaFile.builder(descriptor.moduleName.packageName(), module.build())
             .build()
     }
 
-    private fun bindsMethod(key: AnnotationMirror, item: ClassName): MethodSpec {
-        return MethodSpec.methodBuilder("bind${item.simpleName()}")
+    private fun bindsMethod(): MethodSpec {
+        return MethodSpec.methodBuilder("bind${descriptor.itemName.simpleName()}")
             .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
             .addAnnotation(Binds::class.java)
             .addAnnotation(IntoMap::class.java)
-            .addAnnotation(AnnotationSpec.get(key))
-            .addParameter(item, item.simpleName().toLowerCaseCamel())
+            .addAnnotation(AnnotationSpec.get(descriptor.mapKey))
+            .addParameter(descriptor.itemName, descriptor.itemName.simpleName().toLowerCaseCamel())
             .returns(descriptor.type)
             .build()
     }

@@ -17,12 +17,18 @@
 package com.ivianuu.daggerextensions.sample.multibinding
 
 import com.ivianuu.daggerextensions.AutoBindsIntoSet
+import com.ivianuu.daggerextensions.BindingModule
 import javax.inject.Inject
+
+@BindingModule
+annotation class LoggerModule
 
 interface Logger
 
+@LoggerModule
 @AutoBindsIntoSet(Logger::class)
 class Logger1 @Inject constructor() : Logger
 
+@LoggerModule
 @AutoBindsIntoSet(Logger::class)
 class Logger2 @Inject constructor() : Logger

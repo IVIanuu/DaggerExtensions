@@ -20,8 +20,10 @@ import com.google.auto.common.BasicAnnotationProcessor
 import com.google.auto.service.AutoService
 import com.ivianuu.daggerextensions.autocomponent.AutoComponentProcessingStep
 import com.ivianuu.daggerextensions.autocontribute.AutoContributeProcessingStep
+import com.ivianuu.daggerextensions.bindingmodule.BindingModuleProcessor
 import com.ivianuu.daggerextensions.multibinding.MultiBindingProcessingStep
 import javax.annotation.processing.Processor
+import javax.annotation.processing.RoundEnvironment
 import javax.lang.model.SourceVersion
 
 /**
@@ -29,13 +31,20 @@ import javax.lang.model.SourceVersion
  */
 @AutoService(Processor::class)
 class DaggerExtensionsProcessor : BasicAnnotationProcessor() {
-    
+
+    private val bindingModuleProcessor by lazy { BindingModuleProcessor(processingEnv) }
+
     override fun initSteps(): MutableIterable<ProcessingStep> {
         return mutableSetOf(
             MultiBindingProcessingStep(processingEnv),
             AutoContributeProcessingStep(processingEnv),
             AutoComponentProcessingStep(processingEnv)
         )
+    }
+
+    override fun postRound(roundEnv: RoundEnvironment) {
+        super.postRound(roundEnv)
+        bindingModuleProcessor.postRound(roundEnv)
     }
 
     override fun getSupportedSourceVersion(): SourceVersion {

@@ -47,3 +47,10 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
 
     override fun supportFragmentInjector() = supportFragmentInjector
 }
+
+
+@ActivityBindingModule
+@PerActivity
+@BindsTypes(types = [Activity::class, AppCompatActivity::class, FragmentActivity::class])
+@AutoContribute
+class OtherActivity : AppCompatActivity()

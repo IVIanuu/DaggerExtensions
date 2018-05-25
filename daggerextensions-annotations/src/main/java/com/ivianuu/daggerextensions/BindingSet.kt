@@ -14,24 +14,13 @@
  * limitations under the License.
  */
 
-package com.ivianuu.daggerextensions.sample.multibinding
+package com.ivianuu.daggerextensions
 
-import com.ivianuu.daggerextensions.AutoBindsIntoMap
-import com.ivianuu.daggerextensions.BindingModule
-import com.ivianuu.daggerextensions.key.AutoStringKey
-import javax.inject.Inject
+import kotlin.reflect.KClass
 
-@BindingModule
-annotation class TranslatorModule
-
-interface Translator
-
-@TranslatorModule
-@AutoStringKey("german")
-@AutoBindsIntoMap(Translator::class)
-class GermanTranslator @Inject constructor() : Translator
-
-@TranslatorModule
-@AutoStringKey("english")
-@AutoBindsIntoMap(Translator::class)
-class EnglishTranslator @Inject constructor() : Translator
+/**
+ * @author Manuel Wrage (IVIanuu)
+ */
+@Retention(AnnotationRetention.RUNTIME)
+@Target(AnnotationTarget.ANNOTATION_CLASS)
+annotation class BindingSet(val types: Array<KClass<*>>)

@@ -20,17 +20,17 @@ import com.ivianuu.daggerextensions.AutoBindsIntoSet
 import com.ivianuu.daggerextensions.BindingModule
 import javax.inject.Inject
 
-interface MediaPlayer
-
 @BindingModule
 annotation class SpotifyMediaPlayerModule
+
+@BindingModule
+annotation class SoundCloudMediaPlayerModule
+
+interface MediaPlayer
 
 @SoundCloudMediaPlayerModule
 @AutoBindsIntoSet(MediaPlayer::class)
 class SpotifyMediaPlayer @Inject constructor() : MediaPlayer
-
-@BindingModule
-annotation class SoundCloudMediaPlayerModule
 
 @SpotifyMediaPlayerModule
 @AutoBindsIntoSet(MediaPlayer::class)
