@@ -6,6 +6,8 @@ import com.ivianuu.daggerextensions.AutoContribute
 import com.ivianuu.daggerextensions.sample.deps.ActivityDependency
 import com.ivianuu.daggerextensions.sample.deps.ChildFragmentDependency
 import com.ivianuu.daggerextensions.sample.deps.FragmentDependency
+import com.ivianuu.daggerextensions.sample.injection.ChildFragmentBindingModule
+import com.ivianuu.daggerextensions.sample.injection.FragmentBindingSet
 import com.ivianuu.daggerextensions.sample.injection.PerChildFragment
 import com.ivianuu.daggerextensions.sample.main.MainFragmentBuilder
 import dagger.android.support.AndroidSupportInjection
@@ -18,6 +20,8 @@ import javax.inject.Inject
 @AutoContribute(modules = [MainFragmentBuilder::class])
 class OtherChildFragment : Fragment()
 
+@ChildFragmentBindingModule
+@FragmentBindingSet
 @PerChildFragment
 @AutoContribute
 class ChildFragment : Fragment() {

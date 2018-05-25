@@ -20,10 +20,12 @@ import android.app.Service
 import android.content.Intent
 import com.ivianuu.daggerextensions.AutoContribute
 import com.ivianuu.daggerextensions.sample.injection.ServiceBindingModule
+import com.ivianuu.daggerextensions.sample.injection.ServiceBindingSet
 
 /**
  * @author Manuel Wrage (IVIanuu)
  */
+@ServiceBindingSet
 @ServiceBindingModule
 @AutoContribute
 class DummyService : Service() {

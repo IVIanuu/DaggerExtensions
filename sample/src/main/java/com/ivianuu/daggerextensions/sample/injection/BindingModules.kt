@@ -22,6 +22,9 @@ import com.ivianuu.daggerextensions.BindingModule
 annotation class ActivityBindingModule
 
 @BindingModule
+annotation class ChildFragmentBindingModule
+
+@BindingModule
 annotation class FragmentBindingModule
 
 @BindingModule

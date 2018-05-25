@@ -18,6 +18,8 @@ package com.ivianuu.daggerextensions.sample.injection
 
 import android.app.Activity
 import android.app.Application
+import android.app.Service
+import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
 import com.ivianuu.daggerextensions.BindingSet
@@ -27,3 +29,9 @@ annotation class AppBindingSet
 
 @BindingSet([Activity::class, FragmentActivity::class, AppCompatActivity::class])
 annotation class ActivityBindingSet
+
+@BindingSet([Fragment::class])
+annotation class FragmentBindingSet
+
+@BindingSet([Service::class])
+annotation class ServiceBindingSet
