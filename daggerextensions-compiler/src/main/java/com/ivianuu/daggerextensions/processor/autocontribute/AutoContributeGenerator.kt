@@ -16,10 +16,13 @@
 
 package com.ivianuu.daggerextensions.processor.autocontribute
 
-import com.squareup.javapoet.AnnotationSpec
-import com.squareup.javapoet.JavaFile
-import com.squareup.javapoet.MethodSpec
-import com.squareup.javapoet.TypeSpec
+import com.squareup.javapoet.*
+import dagger.Binds
+import dagger.Module
+import dagger.Subcomponent
+import dagger.android.AndroidInjector
+import dagger.android.ContributesAndroidInjector
+import dagger.multibindings.IntoMap
 import javax.lang.model.element.Modifier
 
 /**
@@ -28,12 +31,20 @@ import javax.lang.model.element.Modifier
 class AutoContributeGenerator(private val descriptor: AutoContributeDescriptor) {
 
     fun generate(): JavaFile {
-        val type = TypeSpec.classBuilder(descriptor.builder)
+        val type = when(descriptor.contributionType) {
+            ContributionType.ANDROID_INJECTOR -> generateAndroid()
+            ContributionType.INJECTOR -> generateNonAndroid()
+        }
+
+        return JavaFile.builder(descriptor.builder.packageName(), type)
+            .build()
+    }
+
+    private fun generateAndroid(): TypeSpec {
+        return TypeSpec.classBuilder(descriptor.builder)
             .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
             .addAnnotation(dagger.Module::class.java)
             .addMethod(buildContributeMethod())
-
-        return JavaFile.builder(descriptor.builder.packageName(), type.build())
             .build()
     }
 
@@ -46,7 +57,7 @@ class AutoContributeGenerator(private val descriptor: AutoContributeDescriptor) 
         descriptor.scopes.forEach { method.addAnnotation(AnnotationSpec.get(it)) }
 
         val annotation =
-            AnnotationSpec.builder(descriptor.contributionType.annotationClass.java)
+            AnnotationSpec.builder(ContributesAndroidInjector::class.java)
 
         descriptor.modules
             .map { it.name }
@@ -57,4 +68,79 @@ class AutoContributeGenerator(private val descriptor: AutoContributeDescriptor) 
         return method.build()
     }
 
+    private fun generateNonAndroid(): TypeSpec {
+        return TypeSpec.classBuilder(descriptor.builder)
+            .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
+            .addAnnotation(
+                AnnotationSpec.builder(Module::class.java)
+                    .addMember("subcomponents", "\$T.class", descriptor.subcomponentName)
+                    .build()
+            )
+            .addMethod(bindInjectorMethod())
+            .addType(subcomponent())
+            .build()
+    }
+
+    private fun subcomponent(): TypeSpec {
+        val subcomponent = TypeSpec.interfaceBuilder(descriptor.subcomponentName)
+            .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
+            .addSuperinterface(
+                ParameterizedTypeName.get(
+                    ClassName.get(AndroidInjector::class.java),
+                    descriptor.target
+                )
+            )
+            .addAnnotation(subcomponentAnnotation())
+            .addType(subcomponentBuilder())
+
+        descriptor.scopes.forEach { subcomponent.addAnnotation(AnnotationSpec.get(it)) }
+
+        return subcomponent.build()
+    }
+
+    private fun subcomponentAnnotation(): AnnotationSpec {
+        val annotation = AnnotationSpec.builder(Subcomponent::class.java)
+
+        descriptor.modules
+            .map { it.name }
+            .forEach { annotation.addMember("modules", "\$T.class", it) }
+
+        return annotation.build()
+    }
+
+    private fun bindInjectorMethod(): MethodSpec {
+        return MethodSpec.methodBuilder("bindInjectorFactory")
+            .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
+            .addAnnotation(Binds::class.java)
+            .addAnnotation(IntoMap::class.java)
+            .addAnnotation(
+                AnnotationSpec.builder(descriptor.mapKey)
+                    .addMember("value", "\$T.class", descriptor.target)
+                    .build()
+            )
+            .addParameter(
+                descriptor.subcomponentName.nestedClass("Builder"),
+                "builder"
+            )
+            .returns(
+                ParameterizedTypeName.get(
+                    ClassName.get(AndroidInjector.Factory::class.java),
+                    WildcardTypeName.subtypeOf(descriptor.baseType)
+                )
+            )
+            .build()
+    }
+
+    private fun subcomponentBuilder(): TypeSpec {
+        return TypeSpec.classBuilder(descriptor.subcomponentName.nestedClass("Builder"))
+            .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT, Modifier.STATIC)
+            .addAnnotation(Subcomponent.Builder::class.java)
+            .superclass(
+                ParameterizedTypeName.get(
+                    ClassName.get(AndroidInjector.Builder::class.java),
+                    descriptor.target
+                )
+            )
+            .build()
+    }
 }

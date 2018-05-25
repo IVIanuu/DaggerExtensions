@@ -31,14 +31,20 @@ data class AutoContributeDescriptor(
     val contributionType: ContributionType,
     val builder: ClassName,
     val modules: Set<Module>,
-    val scopes: Set<AnnotationMirror>
+    val scopes: Set<AnnotationMirror>,
+    val subcomponentName: ClassName,
+    val baseType: ClassName?,
+    val mapKey: ClassName?
 ) {
 
     class Builder internal constructor(
         val element: TypeElement,
         val target: ClassName,
         val contributionType: ContributionType,
-        val builder: ClassName
+        val builder: ClassName,
+        val subcomponentName: ClassName,
+        val baseType: ClassName?,
+        val mapKey: ClassName?
     ) {
 
         private val modules = mutableSetOf<Module>()
@@ -61,7 +67,10 @@ data class AutoContributeDescriptor(
                 contributionType,
                 builder,
                 modules,
-                scopes
+                scopes,
+                subcomponentName,
+                baseType,
+                mapKey
             )
         }
 
@@ -69,10 +78,16 @@ data class AutoContributeDescriptor(
 
     companion object {
 
-        fun builder(element: TypeElement, type: ContributionType): Builder {
+        fun builder(
+            element: TypeElement,
+            type: ContributionType,
+            baseType: ClassName?,
+            mapKey: ClassName?
+        ): Builder {
             val target = ClassName.get(element)
             val builder = ClassName.bestGuess(target.toString() + "Builder")
-            return Builder(element, target, type, builder)
+            val subcomponentName = builder.nestedClass(target.simpleName() + "Subcomponent")
+            return Builder(element, target, type, builder, subcomponentName, baseType, mapKey)
         }
 
     }

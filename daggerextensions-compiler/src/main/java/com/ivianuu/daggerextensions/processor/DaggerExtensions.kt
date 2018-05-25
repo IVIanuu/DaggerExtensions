@@ -22,7 +22,6 @@ import com.ivianuu.daggerextensions.processor.autocomponent.AutoComponentProcess
 import com.ivianuu.daggerextensions.processor.autocontribute.AutoContributeProcessingStep
 import com.ivianuu.daggerextensions.processor.bindingmodule.BindingModuleProcessor
 import com.ivianuu.daggerextensions.processor.bindings.BindingsProcessingStep
-import com.ivianuu.daggerextensions.processor.injector.ContributesInjectorProcessingStep
 import com.ivianuu.daggerextensions.processor.injector.InjectorCreatorProcessingStep
 import com.ivianuu.daggerextensions.processor.injector.InjectorKeyFinderProcessingStep
 import com.ivianuu.daggerextensions.processor.multibinding.MultiBindingProcessingStep
@@ -45,9 +44,8 @@ class DaggerExtensions : BasicAnnotationProcessor() {
                 processingEnv
             ),
             injectorKeyFinder,
-            ContributesInjectorProcessingStep(processingEnv, injectorKeyFinder),
             MultiBindingProcessingStep(processingEnv),
-            AutoContributeProcessingStep(processingEnv),
+            AutoContributeProcessingStep(processingEnv, injectorKeyFinder),
             BindingsProcessingStep(processingEnv),
             AutoComponentProcessingStep(processingEnv)
         )

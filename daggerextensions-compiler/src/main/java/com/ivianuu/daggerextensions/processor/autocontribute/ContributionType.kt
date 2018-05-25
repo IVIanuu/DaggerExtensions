@@ -16,14 +16,9 @@
 
 package com.ivianuu.daggerextensions.processor.autocontribute
 
-import com.ivianuu.daggerextensions.ContributesInjector
-import dagger.android.ContributesAndroidInjector
-import kotlin.reflect.KClass
-
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-enum class ContributionType(val annotationClass: KClass<out Annotation>) {
-    INJECTOR(ContributesInjector::class),
-    ANDROID_INJECTOR(ContributesAndroidInjector::class)
+enum class ContributionType {
+    INJECTOR, ANDROID_INJECTOR
 }

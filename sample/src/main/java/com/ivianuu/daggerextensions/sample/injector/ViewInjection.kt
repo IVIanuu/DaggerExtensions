@@ -23,11 +23,15 @@ import com.ivianuu.daggerextensions.AutoContribute
 import com.ivianuu.daggerextensions.sample.deps.AppDependency
 import com.ivianuu.daggerextensions.sample.injection.PerView
 import com.ivianuu.daggerextensions.sample.injection.ViewBindingModule
+import dagger.Module
 import javax.inject.Inject
+
+@Module
+class MyModule
 
 @ViewBindingModule
 @PerView
-@AutoContribute
+@AutoContribute(modules = [MyModule::class])
 class MyView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {

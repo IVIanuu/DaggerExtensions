@@ -85,18 +85,11 @@ class BindingModuleProcessor(private val processingEnv: ProcessingEnvironment) {
                     ContributionType.INJECTOR
                 }
 
-                val module = if (type == ContributionType.ANDROID_INJECTOR) {
+                modules.add(
                     Module(
                         element.autoContributeName(), setOf(Modifier.PUBLIC, Modifier.ABSTRACT)
                     )
-                } else {
-                    val className = ClassName.bestGuess(
-                        element.asType().toString() + "Builder_Bind${element.simpleName}"
-                    )
-                    Module(className, setOf(Modifier.PUBLIC, Modifier.ABSTRACT))
-                }
-
-                modules.add(module)
+                )
             }
 
             if (MoreElements.isAnnotationPresent(element, AutoBindsIntoMap::class.java)) {

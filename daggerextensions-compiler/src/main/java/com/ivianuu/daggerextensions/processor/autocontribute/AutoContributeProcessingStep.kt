@@ -24,6 +24,7 @@ import com.ivianuu.daggerextensions.AutoContribute
 import com.ivianuu.daggerextensions.BindingSet
 import com.ivianuu.daggerextensions.BindsTo
 import com.ivianuu.daggerextensions.processor.injector.InjectorKey
+import com.ivianuu.daggerextensions.processor.injector.InjectorKeyFinderProcessingStep
 import com.ivianuu.daggerextensions.processor.util.*
 import com.squareup.javapoet.ClassName
 import javax.annotation.processing.ProcessingEnvironment
@@ -36,27 +37,35 @@ import javax.lang.model.element.TypeElement
  * @author Manuel Wrage (IVIanuu)
  */
 class AutoContributeProcessingStep(
-    private val processingEnv: ProcessingEnvironment) : BasicAnnotationProcessor.ProcessingStep {
+    private val processingEnv: ProcessingEnvironment,
+    private val keyFinder: InjectorKeyFinderProcessingStep
+) : BasicAnnotationProcessor.ProcessingStep {
 
     override fun process(elementsByAnnotation: SetMultimap<Class<out Annotation>, Element>): MutableSet<Element> {
-        val autoContributions = elementsByAnnotation[AutoContribute::class.java]
-            .filterIsInstance<TypeElement>()
-            .map(this::createAutoContributer)
-            .toSet()
+        val deferred = mutableSetOf<Element>()
 
-        autoContributions
+        elementsByAnnotation[AutoContribute::class.java]
+            .filterIsInstance<TypeElement>()
+            .map { it to createAutoContributer(it) }
+            .mapNotNull { (element, builder) ->
+                if (builder == null) {
+                    deferred.add(element)
+                }
+
+                builder
+            }
             .map(AutoContributeDescriptor.Builder::build)
             .map(::AutoContributeGenerator)
             .map(AutoContributeGenerator::generate)
             .forEach { writeFile(processingEnv, it) }
 
-        return mutableSetOf()
+        return deferred
     }
 
     override fun annotations() =
         mutableSetOf(AutoContribute::class.java)
 
-    private fun createAutoContributer(element: TypeElement): AutoContributeDescriptor.Builder {
+    private fun createAutoContributer(element: TypeElement): AutoContributeDescriptor.Builder? {
         val isDaggerSupported = InjectorKey.DAGGER_SUPPORTED_TYPES.any {
             processingEnv.typeUtils.isAssignable(
                 element.asType(),
@@ -71,7 +80,21 @@ class AutoContributeProcessingStep(
             ContributionType.INJECTOR
         }
 
-        val builder = AutoContributeDescriptor.builder(element, type)
+        val injectedType = element.asType()
+
+        val key = if (type == ContributionType.INJECTOR) {
+            keyFinder.keys.firstOrNull {
+                processingEnv.typeUtils.isAssignable(
+                    injectedType,
+                    processingEnv.elementUtils.getTypeElement(it.baseType.toString()).asType()
+                )
+            } ?: return null
+        } else {
+            null
+        }
+
+        val builder =
+            AutoContributeDescriptor.builder(element, type, key?.baseType, key?.mapKey)
 
         processingEnv.n { "create auto contribute for ${element.simpleName}" }
 
