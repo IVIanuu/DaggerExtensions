@@ -89,7 +89,7 @@ class ContributesInjectorGenerator(private val descriptor: ContributesInjectorDe
             )
             .returns(
                 ParameterizedTypeName.get(
-                    ClassName.get(AndroidInjector.Builder::class.java),
+                    ClassName.get(AndroidInjector.Factory::class.java),
                     WildcardTypeName.subtypeOf(descriptor.baseType)
                 )
             )

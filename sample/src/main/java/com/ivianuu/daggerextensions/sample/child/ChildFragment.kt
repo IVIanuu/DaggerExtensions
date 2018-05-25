@@ -9,7 +9,6 @@ import com.ivianuu.daggerextensions.sample.deps.FragmentDependency
 import com.ivianuu.daggerextensions.sample.injection.ChildFragmentBindingModule
 import com.ivianuu.daggerextensions.sample.injection.FragmentBindingSet
 import com.ivianuu.daggerextensions.sample.injection.PerChildFragment
-import com.ivianuu.daggerextensions.sample.main.MainFragmentBuilder
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
@@ -17,7 +16,9 @@ import javax.inject.Inject
  * @author Manuel Wrage (IVIanuu)
  */
 
-@AutoContribute(modules = [MainFragmentBuilder::class])
+@ChildFragmentBindingModule
+@PerChildFragment
+@AutoContribute
 class OtherChildFragment : Fragment()
 
 @ChildFragmentBindingModule

@@ -39,7 +39,6 @@ class MyView @JvmOverloads constructor(
 class ViewInjection {
 
     fun inject(view: View) {
-
         val hasViewInjector = findHasViewInjector(view)
         val viewInjector = hasViewInjector.viewInjector()
         viewInjector.inject(view)

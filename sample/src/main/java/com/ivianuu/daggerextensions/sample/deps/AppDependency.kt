@@ -17,8 +17,9 @@
 package com.ivianuu.daggerextensions.sample.deps
 
 import com.ivianuu.daggerextensions.sample.app.App
+import javax.inject.Inject
 
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-class AppDependency(app: App)
+class AppDependency @Inject constructor(app: App)
