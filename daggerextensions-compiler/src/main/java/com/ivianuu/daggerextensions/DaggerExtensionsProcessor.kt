@@ -21,7 +21,7 @@ import com.google.auto.service.AutoService
 import com.ivianuu.daggerextensions.autocomponent.AutoComponentProcessingStep
 import com.ivianuu.daggerextensions.autocontribute.AutoContributeProcessingStep
 import com.ivianuu.daggerextensions.bindingmodule.BindingModuleProcessor
-import com.ivianuu.daggerextensions.bindsto.BindsToProcessingStep
+import com.ivianuu.daggerextensions.bindings.BindingsProcessingStep
 import com.ivianuu.daggerextensions.multibinding.MultiBindingProcessingStep
 import javax.annotation.processing.Processor
 import javax.annotation.processing.RoundEnvironment
@@ -39,7 +39,7 @@ class DaggerExtensionsProcessor : BasicAnnotationProcessor() {
         return mutableSetOf(
             MultiBindingProcessingStep(processingEnv),
             AutoContributeProcessingStep(processingEnv),
-            BindsToProcessingStep(processingEnv),
+            BindingsProcessingStep(processingEnv),
             AutoComponentProcessingStep(processingEnv)
         )
     }

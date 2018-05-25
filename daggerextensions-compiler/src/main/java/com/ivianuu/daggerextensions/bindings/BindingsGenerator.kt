@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.daggerextensions.bindsto
+package com.ivianuu.daggerextensions.bindings
 
 import com.ivianuu.daggerextensions.util.toLowerCaseCamel
 import com.squareup.javapoet.ClassName
@@ -28,7 +28,7 @@ import javax.lang.model.element.Modifier
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-class BindsToGenerator(private val descriptor: BindsToDescriptor) {
+class BindingsGenerator(private val descriptor: BindingsDescriptor) {
 
     fun generate(): JavaFile {
         val module = TypeSpec.classBuilder(descriptor.moduleName)

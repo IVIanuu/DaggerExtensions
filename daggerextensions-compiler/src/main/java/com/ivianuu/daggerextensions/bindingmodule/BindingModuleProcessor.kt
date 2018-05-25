@@ -66,29 +66,38 @@ class BindingModuleProcessor(private val processingEnv: ProcessingEnvironment) {
                 BindingModuleDescriptor.builder(bindingModuleAnnotation)
             }
 
-            val module = when {
-                MoreElements.isAnnotationPresent(element, AutoContribute::class.java) -> {
+            val modules = mutableSetOf<Module>()
+
+            if (MoreElements.isAnnotationPresent(element, AutoContribute::class.java)) {
+                modules.add(
                     Module(
                         element.autoContributeName(), setOf(Modifier.PUBLIC, Modifier.ABSTRACT)
                     )
-                }
-                MoreElements.isAnnotationPresent(element, AutoBindsIntoMap::class.java) -> {
+                )
+            }
+
+            if (MoreElements.isAnnotationPresent(element, AutoBindsIntoMap::class.java)) {
+                modules.add(
                     Module(
                         element.intoMapName(), setOf(Modifier.PUBLIC, Modifier.ABSTRACT)
                     )
-                }
-                MoreElements.isAnnotationPresent(element, AutoBindsIntoSet::class.java) -> {
+                )
+            }
+
+            if (MoreElements.isAnnotationPresent(element, AutoBindsIntoSet::class.java)) {
+                modules.add(
                     Module(
                         element.intoSetName(), setOf(Modifier.PUBLIC, Modifier.ABSTRACT)
                     )
-                }
-                else -> {
-                    // todo print
-                    throw IllegalArgumentException()
-                }
+                )
             }
 
-            builder.addModule(module)
+            if (modules.isNotEmpty()) {
+                modules.forEach { builder.addModule(it) }
+            } else {
+                processingEnv.e { "no modules to bind" }
+            }
+
         }
 
         return builders

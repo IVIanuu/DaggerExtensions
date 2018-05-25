@@ -16,8 +16,10 @@
 
 package com.ivianuu.daggerextensions.sample.multibinding
 
+import com.ivianuu.daggerextensions.AutoBindsIntoMap
 import com.ivianuu.daggerextensions.AutoBindsIntoSet
 import com.ivianuu.daggerextensions.BindingModule
+import com.ivianuu.daggerextensions.key.AutoStringKey
 import javax.inject.Inject
 
 @BindingModule
@@ -28,10 +30,12 @@ annotation class SoundCloudMediaPlayerModule
 
 interface MediaPlayer
 
-@SoundCloudMediaPlayerModule
+@SpotifyMediaPlayerModule
+@AutoStringKey("spotify")
+@AutoBindsIntoMap(MediaPlayer::class)
 @AutoBindsIntoSet(MediaPlayer::class)
 class SpotifyMediaPlayer @Inject constructor() : MediaPlayer
 
-@SpotifyMediaPlayerModule
+@SoundCloudMediaPlayerModule
 @AutoBindsIntoSet(MediaPlayer::class)
 class SoundCloudMediaPlayer @Inject constructor() : MediaPlayer

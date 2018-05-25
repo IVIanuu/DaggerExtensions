@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.daggerextensions.bindsto
+package com.ivianuu.daggerextensions.bindings
 
 import com.google.auto.common.BasicAnnotationProcessor
 import com.google.auto.common.MoreElements
@@ -31,13 +31,13 @@ import javax.lang.model.element.TypeElement
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-class BindsToProcessingStep(private val processingEnv: ProcessingEnvironment): BasicAnnotationProcessor.ProcessingStep {
+class BindingsProcessingStep(private val processingEnv: ProcessingEnvironment): BasicAnnotationProcessor.ProcessingStep {
 
     override fun process(elementsByAnnotation: SetMultimap<Class<out Annotation>, Element>): MutableSet<Element> {
         elementsByAnnotation[BindsTo::class.java]
             .map(this::createBindsToDescriptor)
-            .map(::BindsToGenerator)
-            .map(BindsToGenerator::generate)
+            .map(::BindingsGenerator)
+            .map(BindingsGenerator::generate)
             .forEach { writeFile(processingEnv, it) }
 
         return mutableSetOf()
@@ -45,7 +45,7 @@ class BindsToProcessingStep(private val processingEnv: ProcessingEnvironment): B
 
     override fun annotations() = mutableSetOf(BindsTo::class.java)
 
-    private fun createBindsToDescriptor(element: Element): BindsToDescriptor {
+    private fun createBindsToDescriptor(element: Element): BindingsDescriptor {
         val annotation =
             MoreElements.getAnnotationMirror(element, BindsTo::class.java).get()
 
@@ -57,6 +57,6 @@ class BindsToProcessingStep(private val processingEnv: ProcessingEnvironment): B
 
         val moduleName = element.bindsToName()
 
-        return BindsToDescriptor(element, type, moduleName, to)
+        return BindingsDescriptor(element, type, moduleName, to)
     }
 }

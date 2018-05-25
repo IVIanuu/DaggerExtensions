@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.daggerextensions.bindsto
+package com.ivianuu.daggerextensions.bindings
 
 import com.squareup.javapoet.ClassName
 import javax.lang.model.element.Element
@@ -22,7 +22,7 @@ import javax.lang.model.element.Element
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-data class BindsToDescriptor(
+data class BindingsDescriptor(
     val element: Element,
     val type: ClassName,
     val moduleName: ClassName,

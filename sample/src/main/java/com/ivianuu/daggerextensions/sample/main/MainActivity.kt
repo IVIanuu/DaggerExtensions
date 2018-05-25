@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity
 import com.ivianuu.daggerextensions.AutoContribute
 import com.ivianuu.daggerextensions.BindsTo
 import com.ivianuu.daggerextensions.sample.R
+import com.ivianuu.daggerextensions.sample.child.OtherChildFragmentBuilder
 import com.ivianuu.daggerextensions.sample.injection.ActivityBindingModule
 import com.ivianuu.daggerextensions.sample.injection.PerActivity
 import com.ivianuu.daggerextensions.sample.multibinding.Logger
