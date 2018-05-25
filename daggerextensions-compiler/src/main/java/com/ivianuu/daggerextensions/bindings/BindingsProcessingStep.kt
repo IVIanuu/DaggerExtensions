@@ -36,6 +36,8 @@ class BindingsProcessingStep(private val processingEnv: ProcessingEnvironment): 
 
     override fun process(elementsByAnnotation: SetMultimap<Class<out Annotation>, Element>): MutableSet<Element> {
         val elements = mutableSetOf<Element>()
+        elements.addAll(elementsByAnnotation[AutoComponent::class.java])
+        elements.addAll(elementsByAnnotation[AutoSubcomponent::class.java])
         elements.addAll(elementsByAnnotation[BindsTo::class.java])
         elements.addAll(elementsByAnnotation[AutoContribute::class.java])
         elements.addAll(elementsByAnnotation[AutoBindsIntoMap::class.java])
@@ -52,6 +54,8 @@ class BindingsProcessingStep(private val processingEnv: ProcessingEnvironment): 
     }
 
     override fun annotations() = mutableSetOf(
+        AutoComponent::class.java,
+        AutoSubcomponent::class.java,
         BindsTo::class.java,
         AutoContribute::class.java,
         AutoBindsIntoMap::class.java,

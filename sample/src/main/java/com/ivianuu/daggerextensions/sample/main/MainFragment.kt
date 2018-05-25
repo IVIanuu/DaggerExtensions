@@ -26,7 +26,7 @@ class MainFragment : Fragment(), HasSupportFragmentInjector {
 
     @Inject lateinit var activityDependency: ActivityDependency
     @Inject lateinit var fragmentDependency: FragmentDependency
-    //@Inject lateinit var fragAct: FragmentActivity
+    @Inject lateinit var fragAct: FragmentActivity
     @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
 
     override fun onAttach(context: Context?) {

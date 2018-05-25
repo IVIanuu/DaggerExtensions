@@ -22,6 +22,7 @@ import com.google.auto.common.MoreElements
 import com.google.common.collect.SetMultimap
 import com.ivianuu.daggerextensions.AutoComponent
 import com.ivianuu.daggerextensions.AutoSubcomponent
+import com.ivianuu.daggerextensions.BindingSet
 import com.ivianuu.daggerextensions.BindsTo
 import com.ivianuu.daggerextensions.util.Module
 import com.ivianuu.daggerextensions.util.bindsToName
@@ -93,7 +94,8 @@ class AutoComponentProcessingStep(private val processingEnv: ProcessingEnvironme
             .forEach { builder.addModule(it) }
 
         // auto include binding modules
-        if (MoreElements.isAnnotationPresent(element, BindsTo::class.java)) {
+        if (MoreElements.isAnnotationPresent(element, BindsTo::class.java)
+            || AnnotationMirrors.getAnnotatedAnnotations(element, BindingSet::class.java).isNotEmpty()) {
             builder.addModule(
                 Module(
                     element.bindsToName(), setOf(Modifier.PUBLIC, Modifier.ABSTRACT)

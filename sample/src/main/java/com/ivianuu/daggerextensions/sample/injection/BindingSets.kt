@@ -17,12 +17,13 @@
 package com.ivianuu.daggerextensions.sample.injection
 
 import android.app.Activity
+import android.app.Application
 import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
 import com.ivianuu.daggerextensions.BindingSet
 
-/**
- * @author Manuel Wrage (IVIanuu)
- */
+@BindingSet([Application::class])
+annotation class AppBindingSet
+
 @BindingSet([Activity::class, FragmentActivity::class, AppCompatActivity::class])
 annotation class ActivityBindingSet
