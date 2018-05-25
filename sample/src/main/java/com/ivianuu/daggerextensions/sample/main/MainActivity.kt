@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
 import com.ivianuu.daggerextensions.AutoContribute
+import com.ivianuu.daggerextensions.BindingSet
 import com.ivianuu.daggerextensions.BindsTo
 import com.ivianuu.daggerextensions.sample.R
 import com.ivianuu.daggerextensions.sample.child.OtherChildFragmentBuilder
@@ -21,9 +22,13 @@ import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import javax.inject.Inject
 
+@BindingSet(types = [Activity::class, FragmentActivity::class, AppCompatActivity::class])
+annotation class ActivityBindingSet
+
 @ActivityBindingModule
 @PerActivity
-@BindsTo(types = [Activity::class, AppCompatActivity::class, FragmentActivity::class])
+@ActivityBindingSet
+//@BindsTo(types = [Any::class])
 @AutoContribute(modules = [OtherChildFragmentBuilder::class, MainFragmentBuilder::class])
 class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
 

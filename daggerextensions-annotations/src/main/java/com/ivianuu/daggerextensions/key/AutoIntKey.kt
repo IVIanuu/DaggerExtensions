@@ -17,8 +17,11 @@
 package com.ivianuu.daggerextensions.key
 
 import dagger.MapKey
-import kotlin.reflect.KClass
 
+/**
+ * Use this instead of [dagger.multibindings.IntKey] if you use
+ * [com.ivianuu.daggerextensions.AutoBindsIntoMap]
+ */
 @Retention(AnnotationRetention.RUNTIME)
 @MapKey
 annotation class AutoIntKey(val value: Int)

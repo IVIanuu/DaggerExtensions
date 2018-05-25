@@ -21,6 +21,7 @@ import com.google.auto.common.BasicAnnotationProcessor
 import com.google.auto.common.MoreElements
 import com.google.common.collect.SetMultimap
 import com.ivianuu.daggerextensions.AutoContribute
+import com.ivianuu.daggerextensions.BindingSet
 import com.ivianuu.daggerextensions.BindsTo
 import com.ivianuu.daggerextensions.util.*
 import com.squareup.javapoet.ClassName
@@ -74,7 +75,8 @@ class AutoContributeProcessingStep(
             .forEach { builder.addModule(it) }
 
         // auto include binding modules
-        if (MoreElements.isAnnotationPresent(element, BindsTo::class.java)) {
+        if (MoreElements.isAnnotationPresent(element, BindsTo::class.java)
+            || AnnotationMirrors.getAnnotatedAnnotations(element, BindingSet::class.java).isNotEmpty()) {
             builder.addModule(
                 Module(
                     element.bindsToName(), setOf(Modifier.PUBLIC, Modifier.ABSTRACT)

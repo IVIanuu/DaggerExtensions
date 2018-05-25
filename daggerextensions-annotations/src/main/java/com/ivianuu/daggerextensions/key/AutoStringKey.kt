@@ -18,6 +18,10 @@ package com.ivianuu.daggerextensions.key
 
 import dagger.MapKey
 
+/**
+ * Use this instead of [dagger.multibindings.StringKey] if you use
+ * [com.ivianuu.daggerextensions.AutoBindsIntoMap]
+ */
 @Retention(AnnotationRetention.RUNTIME)
 @MapKey
 annotation class AutoStringKey(val value: String)

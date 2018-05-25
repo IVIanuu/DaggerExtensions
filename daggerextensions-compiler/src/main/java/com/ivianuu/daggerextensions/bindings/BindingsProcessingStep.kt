@@ -16,10 +16,11 @@
 
 package com.ivianuu.daggerextensions.bindings
 
+import com.google.auto.common.AnnotationMirrors
 import com.google.auto.common.BasicAnnotationProcessor
 import com.google.auto.common.MoreElements
 import com.google.common.collect.SetMultimap
-import com.ivianuu.daggerextensions.BindsTo
+import com.ivianuu.daggerextensions.*
 import com.ivianuu.daggerextensions.util.bindsToName
 import com.ivianuu.daggerextensions.util.getClassArrayValues
 import com.ivianuu.daggerextensions.util.writeFile
@@ -34,7 +35,14 @@ import javax.lang.model.element.TypeElement
 class BindingsProcessingStep(private val processingEnv: ProcessingEnvironment): BasicAnnotationProcessor.ProcessingStep {
 
     override fun process(elementsByAnnotation: SetMultimap<Class<out Annotation>, Element>): MutableSet<Element> {
-        elementsByAnnotation[BindsTo::class.java]
+        val elements = mutableSetOf<Element>()
+        elements.addAll(elementsByAnnotation[BindsTo::class.java])
+        elements.addAll(elementsByAnnotation[AutoContribute::class.java])
+        elements.addAll(elementsByAnnotation[AutoBindsIntoMap::class.java])
+        elements.addAll(elementsByAnnotation[AutoBindsIntoSet::class.java])
+
+        elements
+            .filter(this::isValid)
             .map(this::createBindsToDescriptor)
             .map(::BindingsGenerator)
             .map(BindingsGenerator::generate)
@@ -43,20 +51,40 @@ class BindingsProcessingStep(private val processingEnv: ProcessingEnvironment): 
         return mutableSetOf()
     }
 
-    override fun annotations() = mutableSetOf(BindsTo::class.java)
+    override fun annotations() = mutableSetOf(
+        BindsTo::class.java,
+        AutoContribute::class.java,
+        AutoBindsIntoMap::class.java,
+        AutoBindsIntoSet::class.java
+    )
+
+    private fun isValid(element: Element): Boolean {
+        return MoreElements.isAnnotationPresent(element, BindsTo::class.java)
+                || AnnotationMirrors
+            .getAnnotatedAnnotations(element, BindingSet::class.java).isNotEmpty()
+    }
 
     private fun createBindsToDescriptor(element: Element): BindingsDescriptor {
-        val annotation =
-            MoreElements.getAnnotationMirror(element, BindsTo::class.java).get()
+        val types = mutableSetOf<ClassName>()
+
+        // binds to
+        MoreElements.getAnnotationMirror(element, BindsTo::class.java).orNull()
+            ?.getClassArrayValues("types")
+            ?.map(ClassName::bestGuess)
+            ?.forEach { types.add(it) }
+
+        // binding sets
+        AnnotationMirrors.getAnnotatedAnnotations(element, BindingSet::class.java)
+            .map { processingEnv.elementUtils.getTypeElement(it.annotationType.toString()) }
+            .map { MoreElements.getAnnotationMirror(it, BindingSet::class.java).get() }
+            .flatMap { it.getClassArrayValues("types") }
+            .map(ClassName::bestGuess)
+            .forEach { types.add(it) }
 
         val type = ClassName.get(element as TypeElement)
 
-        val to = annotation.getClassArrayValues("types")
-            .map(ClassName::bestGuess)
-            .toSet()
-
         val moduleName = element.bindsToName()
 
-        return BindingsDescriptor(element, type, moduleName, to)
+        return BindingsDescriptor(element, type, moduleName, types)
     }
 }
