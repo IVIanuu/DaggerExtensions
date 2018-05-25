@@ -23,6 +23,7 @@ import com.google.common.collect.SetMultimap
 import com.ivianuu.daggerextensions.AutoContribute
 import com.ivianuu.daggerextensions.BindingSet
 import com.ivianuu.daggerextensions.BindsTo
+import com.ivianuu.daggerextensions.processor.injector.InjectorKey
 import com.ivianuu.daggerextensions.processor.util.*
 import com.squareup.javapoet.ClassName
 import javax.annotation.processing.ProcessingEnvironment
@@ -35,8 +36,7 @@ import javax.lang.model.element.TypeElement
  * @author Manuel Wrage (IVIanuu)
  */
 class AutoContributeProcessingStep(
-    private val processingEnv: ProcessingEnvironment
-) : BasicAnnotationProcessor.ProcessingStep {
+    private val processingEnv: ProcessingEnvironment) : BasicAnnotationProcessor.ProcessingStep {
 
     override fun process(elementsByAnnotation: SetMultimap<Class<out Annotation>, Element>): MutableSet<Element> {
         val autoContributions = elementsByAnnotation[AutoContribute::class.java]
@@ -57,7 +57,21 @@ class AutoContributeProcessingStep(
         mutableSetOf(AutoContribute::class.java)
 
     private fun createAutoContributer(element: TypeElement): AutoContributeDescriptor.Builder {
-        val builder = AutoContributeDescriptor.builder(element)
+        val isDaggerSupported = InjectorKey.DAGGER_SUPPORTED_TYPES.any {
+            processingEnv.typeUtils.isAssignable(
+                element.asType(),
+                processingEnv.elementUtils.getTypeElement(it.baseType.toString()).asType()
+            )
+
+        }
+
+        val type = if (isDaggerSupported) {
+            ContributionType.ANDROID_INJECTOR
+        } else {
+            ContributionType.INJECTOR
+        }
+
+        val builder = AutoContributeDescriptor.builder(element, type)
 
         processingEnv.n { "create auto contribute for ${element.simpleName}" }
 

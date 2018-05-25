@@ -22,7 +22,7 @@ import kotlin.reflect.KClass
  * @author Manuel Wrage (IVIanuu)
  */
 @Retention(AnnotationRetention.RUNTIME)
-@Target(AnnotationTarget.CLASS)
+@Target(AnnotationTarget.FUNCTION)
 annotation class ContributesInjector(
     val modules: Array<KClass<*>> = []
 )

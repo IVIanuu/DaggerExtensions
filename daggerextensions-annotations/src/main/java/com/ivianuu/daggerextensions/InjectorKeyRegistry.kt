@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package com.ivianuu.daggerextensions.sample.injector
+package com.ivianuu.daggerextensions
 
-import android.view.View
-import com.ivianuu.daggerextensions.InjectorCreator
+import kotlin.reflect.KClass
 
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-@InjectorCreator([View::class])
-interface ViewInjectorRegistry
+@Retention(AnnotationRetention.RUNTIME)
+annotation class InjectorKeyRegistry(
+    val keys: Array<KClass<out Annotation>> = []
+)

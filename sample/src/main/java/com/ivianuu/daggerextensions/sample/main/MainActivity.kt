@@ -20,7 +20,6 @@ import com.ivianuu.daggerextensions.sample.multibinding.MediaPlayer
 import com.ivianuu.daggerextensions.sample.multibinding.Pizza
 import com.ivianuu.daggerextensions.sample.multibinding.Translator
 import dagger.android.AndroidInjection
-import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import javax.inject.Inject
@@ -31,14 +30,13 @@ import javax.inject.Inject
 @AutoContribute(modules = [OtherChildFragmentBuilder::class, MainFragmentBuilder::class])
 class MainActivity : AppCompatActivity(), HasSupportFragmentInjector, HasViewInjector {
 
-    override fun viewInjector() = AndroidInjector<View> { }
-
     @Inject lateinit var app: Application
     @Inject lateinit var loggers: Set<@JvmSuppressWildcards Logger>
     @Inject lateinit var mediaPlayers: Set<@JvmSuppressWildcards MediaPlayer>
     @Inject lateinit var pizzas: Map<String, @JvmSuppressWildcards Pizza>
     @Inject lateinit var translators: Map<String, @JvmSuppressWildcards Translator>
     @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
+    @Inject lateinit var viewInjector: DispatchingAndroidInjector<View>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -53,6 +51,7 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector, HasViewInj
 
     override fun supportFragmentInjector() = supportFragmentInjector
 
+    override fun viewInjector() = viewInjector
 }
 
 

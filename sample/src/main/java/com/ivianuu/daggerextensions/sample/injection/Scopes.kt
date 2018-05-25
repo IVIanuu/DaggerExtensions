@@ -26,3 +26,6 @@ annotation class PerChildFragment
 
 @Scope
 annotation class PerFragment
+
+@Scope
+annotation class PerView

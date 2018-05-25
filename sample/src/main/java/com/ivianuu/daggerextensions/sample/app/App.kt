@@ -1,9 +1,12 @@
 package com.ivianuu.daggerextensions.sample.app
 
 import com.ivianuu.daggerextensions.AutoComponent
+import com.ivianuu.daggerextensions.InjectorKeyRegistry
 import com.ivianuu.daggerextensions.sample.injection.ActivityBindingModule_
 import com.ivianuu.daggerextensions.sample.injection.AppBindingSet
 import com.ivianuu.daggerextensions.sample.injection.ServiceBindingModule_
+import com.ivianuu.daggerextensions.sample.injector.ViewInjectionModule
+import com.ivianuu.daggerextensions.sample.injector.ViewKey
 import com.ivianuu.daggerextensions.sample.multibinding.*
 import com.ivianuu.daggerextensions.sample.sub.SomethingComponent
 import dagger.android.AndroidInjectionModule
@@ -13,10 +16,12 @@ import dagger.android.support.DaggerApplication
 import javax.inject.Inject
 import javax.inject.Singleton
 
+@InjectorKeyRegistry([ViewKey::class])
+interface InjectorKeyRegistry
+
 @AppBindingSet
 @Singleton
 @AutoComponent(
-    target = App::class,
     modules = [
         AndroidInjectionModule::class,
         AndroidSupportInjectionModule::class,
@@ -27,21 +32,14 @@ import javax.inject.Singleton
         SoundCloudMediaPlayerModule_::class,
         LoggerModule_::class,
         TranslatorModule_::class,
-        ServiceBindingModule_::class
+        ServiceBindingModule_::class,
+        ViewInjectionModule::class
     ],
     injects = [GlideConfig::class],
     superInterfaces = [MySuperInterface::class],
     subcomponents = [SomethingComponent::class]
 )
-interface AppComponentRegistry
-
-/**
- * @author Manuel Wrage (IVIanuu)
- */
-
 class App : DaggerApplication() {
-
-    lateinit var appComponent: AppComponent
 
     override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
         return DaggerAppComponent.builder()

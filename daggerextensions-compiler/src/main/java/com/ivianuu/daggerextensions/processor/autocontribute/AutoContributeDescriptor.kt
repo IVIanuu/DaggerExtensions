@@ -28,6 +28,7 @@ import javax.lang.model.element.TypeElement
 data class AutoContributeDescriptor(
     val element: Element,
     val target: ClassName,
+    val contributionType: ContributionType,
     val builder: ClassName,
     val modules: Set<Module>,
     val scopes: Set<AnnotationMirror>
@@ -36,6 +37,7 @@ data class AutoContributeDescriptor(
     class Builder internal constructor(
         val element: TypeElement,
         val target: ClassName,
+        val contributionType: ContributionType,
         val builder: ClassName
     ) {
 
@@ -56,6 +58,7 @@ data class AutoContributeDescriptor(
             return AutoContributeDescriptor(
                 element,
                 target,
+                contributionType,
                 builder,
                 modules,
                 scopes
@@ -66,10 +69,10 @@ data class AutoContributeDescriptor(
 
     companion object {
 
-        fun builder(element: TypeElement): Builder {
+        fun builder(element: TypeElement, type: ContributionType): Builder {
             val target = ClassName.get(element)
             val builder = ClassName.bestGuess(target.toString() + "Builder")
-            return Builder(element, target, builder)
+            return Builder(element, target, type, builder)
         }
 
     }

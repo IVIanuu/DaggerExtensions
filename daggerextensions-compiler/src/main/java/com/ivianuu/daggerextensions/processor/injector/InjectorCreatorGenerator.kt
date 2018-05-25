@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.daggerextensions.processor.injector.registry
+package com.ivianuu.daggerextensions.processor.injector
 
 import com.ivianuu.daggerextensions.processor.util.toLowerCaseCamel
 import com.squareup.javapoet.*
@@ -27,7 +27,7 @@ import javax.lang.model.element.Modifier
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-class InjectorRegistryGenerator(private val descriptor: InjectorRegistryDescriptor) {
+class InjectorCreatorGenerator(private val descriptor: InjectorCreatorDescriptor) {
 
     fun generate(): List<JavaFile> {
         return listOf(hasInjector(), mapKey(), injectionModule())

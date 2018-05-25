@@ -29,3 +29,6 @@ annotation class FragmentBindingModule
 
 @BindingModule
 annotation class ServiceBindingModule
+
+@BindingModule
+annotation class ViewBindingModule

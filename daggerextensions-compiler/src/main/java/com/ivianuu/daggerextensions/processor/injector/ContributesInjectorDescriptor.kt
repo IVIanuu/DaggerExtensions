@@ -14,14 +14,23 @@
  * limitations under the License.
  */
 
-package com.ivianuu.daggerextensions.processor.contributesinjector
+package com.ivianuu.daggerextensions.processor.injector
 
-import javax.lang.model.element.Element
+import com.squareup.javapoet.ClassName
+import javax.lang.model.element.AnnotationMirror
+import javax.lang.model.element.ExecutableElement
 
 /**
  * @author Manuel Wrage (IVIanuu)
  */
 data class ContributesInjectorDescriptor(
-    val element: Element
-
+    val element: ExecutableElement,
+    val enclosingModule: ClassName,
+    val injectedType: ClassName,
+    val scopes: Set<AnnotationMirror>,
+    val modules: Set<ClassName>,
+    val baseType: ClassName,
+    val mapKey: ClassName,
+    val moduleName: ClassName,
+    val subcomponentName: ClassName
 )

@@ -14,13 +14,16 @@
  * limitations under the License.
  */
 
-package com.ivianuu.daggerextensions.sample.injector
+package com.ivianuu.daggerextensions.processor.autocontribute
 
-import android.view.View
-import com.ivianuu.daggerextensions.InjectorCreator
+import com.ivianuu.daggerextensions.ContributesInjector
+import dagger.android.ContributesAndroidInjector
+import kotlin.reflect.KClass
 
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-@InjectorCreator([View::class])
-interface ViewInjectorRegistry
+enum class ContributionType(val annotationClass: KClass<out Annotation>) {
+    INJECTOR(ContributesInjector::class),
+    ANDROID_INJECTOR(ContributesAndroidInjector::class)
+}

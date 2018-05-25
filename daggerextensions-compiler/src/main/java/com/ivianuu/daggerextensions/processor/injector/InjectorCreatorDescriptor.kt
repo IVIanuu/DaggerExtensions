@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.daggerextensions.processor.injector.registry
+package com.ivianuu.daggerextensions.processor.injector
 
 import com.squareup.javapoet.ClassName
 import javax.lang.model.element.Element
@@ -22,7 +22,7 @@ import javax.lang.model.element.Element
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-data class InjectorRegistryDescriptor(
+data class InjectorCreatorDescriptor(
     val element: Element,
     val target: ClassName,
     val type: ClassName,

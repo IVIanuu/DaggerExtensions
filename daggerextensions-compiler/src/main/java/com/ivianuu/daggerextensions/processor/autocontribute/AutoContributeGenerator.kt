@@ -20,7 +20,6 @@ import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.JavaFile
 import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.TypeSpec
-import dagger.android.ContributesAndroidInjector
 import javax.lang.model.element.Modifier
 
 /**
@@ -46,7 +45,8 @@ class AutoContributeGenerator(private val descriptor: AutoContributeDescriptor) 
 
         descriptor.scopes.forEach { method.addAnnotation(AnnotationSpec.get(it)) }
 
-        val annotation = AnnotationSpec.builder(ContributesAndroidInjector::class.java)
+        val annotation =
+            AnnotationSpec.builder(descriptor.contributionType.annotationClass.java)
 
         descriptor.modules
             .map { it.name }

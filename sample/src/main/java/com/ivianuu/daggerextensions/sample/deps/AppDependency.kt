@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-package com.ivianuu.daggerextensions
+package com.ivianuu.daggerextensions.sample.deps
 
-import kotlin.reflect.KClass
+import com.ivianuu.daggerextensions.sample.app.App
 
 /**
- * Generates Has**Injector **Key and **InjectionModule Boilerplate for each of [types]
+ * @author Manuel Wrage (IVIanuu)
  */
-@Retention(AnnotationRetention.RUNTIME)
-@Target(AnnotationTarget.CLASS)
-annotation class InjectorRegistry(val types: Array<KClass<*>>)
+class AppDependency(app: App)

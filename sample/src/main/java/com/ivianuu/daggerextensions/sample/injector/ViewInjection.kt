@@ -16,11 +16,30 @@
 
 package com.ivianuu.daggerextensions.sample.injector
 
+import android.content.Context
+import android.util.AttributeSet
 import android.view.View
+import com.ivianuu.daggerextensions.AutoContribute
+import com.ivianuu.daggerextensions.sample.deps.AppDependency
+import com.ivianuu.daggerextensions.sample.injection.PerView
+import com.ivianuu.daggerextensions.sample.injection.ViewBindingModule
+import javax.inject.Inject
+
+@ViewBindingModule
+@PerView
+@AutoContribute
+class MyView @JvmOverloads constructor(
+    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
+
+    @Inject lateinit var appDependency: AppDependency
+
+}
 
 class ViewInjection {
 
     fun inject(view: View) {
+
         val hasViewInjector = findHasViewInjector(view)
         val viewInjector = hasViewInjector.viewInjector()
         viewInjector.inject(view)

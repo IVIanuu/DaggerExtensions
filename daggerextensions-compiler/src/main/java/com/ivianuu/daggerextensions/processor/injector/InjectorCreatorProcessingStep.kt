@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package com.ivianuu.daggerextensions.processor.injector.registry
+package com.ivianuu.daggerextensions.processor.injector
 
 import com.google.auto.common.BasicAnnotationProcessor
 import com.google.auto.common.MoreElements
 import com.google.common.collect.SetMultimap
-import com.ivianuu.daggerextensions.InjectorRegistry
+import com.ivianuu.daggerextensions.InjectorCreator
 import com.ivianuu.daggerextensions.processor.util.getClassArrayValues
 import com.ivianuu.daggerextensions.processor.util.writeFile
 import com.squareup.javapoet.ClassName
@@ -30,24 +30,24 @@ import javax.lang.model.element.TypeElement
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-class InjectorRegistryProcessingStep(private val processingEnv: ProcessingEnvironment) : BasicAnnotationProcessor.ProcessingStep {
+class InjectorCreatorProcessingStep(private val processingEnv: ProcessingEnvironment) : BasicAnnotationProcessor.ProcessingStep {
 
     override fun process(elementsByAnnotation: SetMultimap<Class<out Annotation>, Element>): MutableSet<Element> {
-        elementsByAnnotation[InjectorRegistry::class.java]
+        elementsByAnnotation[InjectorCreator::class.java]
             .map(this::createDescriptors)
             .flatten()
-            .map(::InjectorRegistryGenerator)
-            .flatMap(InjectorRegistryGenerator::generate)
+            .map(::InjectorCreatorGenerator)
+            .flatMap(InjectorCreatorGenerator::generate)
             .forEach { writeFile(processingEnv, it) }
 
         return mutableSetOf()
     }
 
-    override fun annotations() = mutableSetOf(InjectorRegistry::class.java)
+    override fun annotations() = mutableSetOf(InjectorCreator::class.java)
 
-    private fun createDescriptors(element: Element): Set<InjectorRegistryDescriptor> {
+    private fun createDescriptors(element: Element): Set<InjectorCreatorDescriptor> {
         val annotation =
-            MoreElements.getAnnotationMirror(element, InjectorRegistry::class.java)
+            MoreElements.getAnnotationMirror(element, InjectorCreator::class.java)
                 .get()
 
         return annotation.getClassArrayValues("types")
@@ -67,7 +67,7 @@ class InjectorRegistryProcessingStep(private val processingEnv: ProcessingEnviro
                 val injectionModuleName =
                     ClassName.bestGuess("${target.packageName()}.${simpleName}InjectionModule")
 
-                InjectorRegistryDescriptor(
+                InjectorCreatorDescriptor(
                     element, target, type, hasInjectorName, mapKeyName, injectionModuleName
                 )
             }
