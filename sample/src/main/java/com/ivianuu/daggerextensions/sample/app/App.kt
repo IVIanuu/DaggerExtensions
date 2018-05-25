@@ -13,12 +13,10 @@ import dagger.android.support.DaggerApplication
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/**
- * @author Manuel Wrage (IVIanuu)
- */
 @AppBindingSet
 @Singleton
 @AutoComponent(
+    target = App::class,
     modules = [
         AndroidInjectionModule::class,
         AndroidSupportInjectionModule::class,
@@ -35,7 +33,15 @@ import javax.inject.Singleton
     superInterfaces = [MySuperInterface::class],
     subcomponents = [SomethingComponent::class]
 )
+interface AppComponentRegistry
+
+/**
+ * @author Manuel Wrage (IVIanuu)
+ */
+
 class App : DaggerApplication() {
+
+    lateinit var appComponent: AppComponent
 
     override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
         return DaggerAppComponent.builder()

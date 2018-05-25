@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.daggerextensions.processor.injectorregistry
+package com.ivianuu.daggerextensions.processor.injector.registry
 
 import com.squareup.javapoet.ClassName
 import javax.lang.model.element.Element

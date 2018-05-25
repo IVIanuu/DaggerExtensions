@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.daggerextensions.processor.injectorregistry
+package com.ivianuu.daggerextensions.processor.injector.registry
 
 import com.ivianuu.daggerextensions.processor.util.toLowerCaseCamel
 import com.squareup.javapoet.*

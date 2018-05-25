@@ -71,15 +71,11 @@ class AutoComponentProcessingStep(private val processingEnv: ProcessingEnvironme
         val targetValue = AnnotationMirrors
             .getAnnotationValue(annotation, "target").value
 
-        processingEnv.n { "target value is $targetValue type is ${targetValue::class}" }
-
         val target = if (targetValue.toString() != Unit::class.java.name) {
             ClassName.bestGuess(targetValue.toString())
         } else {
             ClassName.get(element)
         }
-
-        processingEnv.n { "target is $target" }
 
         val builder =
             AutoComponentDescriptor.builder(element, target, type)
@@ -108,7 +104,7 @@ class AutoComponentProcessingStep(private val processingEnv: ProcessingEnvironme
             || AnnotationMirrors.getAnnotatedAnnotations(element, BindingSet::class.java).isNotEmpty()) {
             builder.addModule(
                 Module(
-                    element.bindsToName(), setOf(Modifier.PUBLIC, Modifier.ABSTRACT)
+                    target.bindsToName(), setOf(Modifier.PUBLIC, Modifier.ABSTRACT)
                 )
             )
         }

@@ -85,9 +85,39 @@ class BindingsProcessingStep(private val processingEnv: ProcessingEnvironment): 
             .map(ClassName::bestGuess)
             .forEach { types.add(it) }
 
-        val type = ClassName.get(element as TypeElement)
+        var type: ClassName? = null
 
-        val moduleName = element.bindsToName()
+        val componentAnnotation =
+            MoreElements.getAnnotationMirror(element, AutoComponent::class.java).orNull()
+
+        if (componentAnnotation != null) {
+            val targetValue = AnnotationMirrors
+                .getAnnotationValue(componentAnnotation, "target").value
+                .toString()
+
+            if (targetValue != Unit::class.java.name) {
+                type = ClassName.bestGuess(targetValue)
+            }
+        }
+
+        val subcomponentAnnotation =
+            MoreElements.getAnnotationMirror(element, AutoSubcomponent::class.java).orNull()
+
+        if (subcomponentAnnotation != null) {
+            val targetValue = AnnotationMirrors
+                .getAnnotationValue(subcomponentAnnotation, "target").value
+                .toString()
+
+            if (targetValue != Unit::class.java.name) {
+                type = ClassName.bestGuess(targetValue)
+            }
+        }
+
+        if (type == null) {
+            type = ClassName.get(element as TypeElement)!!
+        }
+
+        val moduleName = type.bindsToName()
 
         return BindingsDescriptor(element, type, moduleName, types)
     }

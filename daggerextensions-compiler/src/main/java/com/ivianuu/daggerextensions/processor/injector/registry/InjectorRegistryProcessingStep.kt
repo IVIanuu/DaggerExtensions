@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.daggerextensions.processor.injectorregistry
+package com.ivianuu.daggerextensions.processor.injector.registry
 
 import com.google.auto.common.BasicAnnotationProcessor
 import com.google.auto.common.MoreElements
@@ -68,7 +68,8 @@ class InjectorRegistryProcessingStep(private val processingEnv: ProcessingEnviro
                     ClassName.bestGuess("${target.packageName()}.${simpleName}InjectionModule")
 
                 InjectorRegistryDescriptor(
-                    element, target, type, hasInjectorName, mapKeyName, injectionModuleName)
+                    element, target, type, hasInjectorName, mapKeyName, injectionModuleName
+                )
             }
             .toSet()
     }

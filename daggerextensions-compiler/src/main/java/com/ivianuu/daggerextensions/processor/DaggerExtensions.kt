@@ -22,7 +22,7 @@ import com.ivianuu.daggerextensions.processor.autocomponent.AutoComponentProcess
 import com.ivianuu.daggerextensions.processor.autocontribute.AutoContributeProcessingStep
 import com.ivianuu.daggerextensions.processor.bindingmodule.BindingModuleProcessor
 import com.ivianuu.daggerextensions.processor.bindings.BindingsProcessingStep
-import com.ivianuu.daggerextensions.processor.injectorregistry.InjectorRegistryProcessingStep
+import com.ivianuu.daggerextensions.processor.injector.registry.InjectorRegistryProcessingStep
 import com.ivianuu.daggerextensions.processor.multibinding.MultiBindingProcessingStep
 import javax.annotation.processing.Processor
 import javax.annotation.processing.RoundEnvironment
@@ -38,7 +38,9 @@ class DaggerExtensions : BasicAnnotationProcessor() {
 
     override fun initSteps(): MutableIterable<ProcessingStep> {
         return mutableSetOf(
-            InjectorRegistryProcessingStep(processingEnv),
+            InjectorRegistryProcessingStep(
+                processingEnv
+            ),
             MultiBindingProcessingStep(processingEnv),
             AutoContributeProcessingStep(processingEnv),
             BindingsProcessingStep(processingEnv),

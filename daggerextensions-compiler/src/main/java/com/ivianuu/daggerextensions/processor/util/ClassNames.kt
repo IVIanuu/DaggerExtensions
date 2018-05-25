@@ -34,3 +34,7 @@ fun Element.autoContributeName(): ClassName {
 fun Element.bindsToName(): ClassName {
     return ClassName.bestGuess(asType().toString() + "Bindings")
 }
+
+fun ClassName.bindsToName(): ClassName {
+    return ClassName.bestGuess(toString() + "Bindings")
+}
