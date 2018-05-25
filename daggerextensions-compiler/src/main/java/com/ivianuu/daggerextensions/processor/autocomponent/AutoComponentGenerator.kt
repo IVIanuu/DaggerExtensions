@@ -19,6 +19,7 @@ package com.ivianuu.daggerextensions.processor.autocomponent
 import com.ivianuu.daggerextensions.processor.util.toLowerCaseCamel
 import com.squareup.javapoet.*
 import dagger.BindsInstance
+import dagger.android.AndroidInjector
 import javax.lang.model.element.Modifier
 
 class AutoComponentGenerator(private val descriptor: AutoComponentDescriptor) {
@@ -40,7 +41,7 @@ class AutoComponentGenerator(private val descriptor: AutoComponentDescriptor) {
 
     private fun androidInjector(): TypeName {
         return ParameterizedTypeName.get(
-            ClassName.bestGuess("dagger.android.AndroidInjector"),
+            ClassName.get(AndroidInjector::class.java),
             descriptor.target
         )
     }

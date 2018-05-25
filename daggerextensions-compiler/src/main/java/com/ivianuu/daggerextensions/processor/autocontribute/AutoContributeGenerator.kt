@@ -16,7 +16,11 @@
 
 package com.ivianuu.daggerextensions.processor.autocontribute
 
-import com.squareup.javapoet.*
+import com.squareup.javapoet.AnnotationSpec
+import com.squareup.javapoet.JavaFile
+import com.squareup.javapoet.MethodSpec
+import com.squareup.javapoet.TypeSpec
+import dagger.android.ContributesAndroidInjector
 import javax.lang.model.element.Modifier
 
 /**
@@ -42,7 +46,7 @@ class AutoContributeGenerator(private val descriptor: AutoContributeDescriptor) 
 
         descriptor.scopes.forEach { method.addAnnotation(AnnotationSpec.get(it)) }
 
-        val annotation = AnnotationSpec.builder(CLASS_CONTRIBUTES_ANDROID_INJECTOR)
+        val annotation = AnnotationSpec.builder(ContributesAndroidInjector::class.java)
 
         descriptor.modules
             .map { it.name }
@@ -53,8 +57,4 @@ class AutoContributeGenerator(private val descriptor: AutoContributeDescriptor) 
         return method.build()
     }
 
-    private companion object {
-        val CLASS_CONTRIBUTES_ANDROID_INJECTOR =
-            ClassName.bestGuess("dagger.android.ContributesAndroidInjector")
-    }
 }

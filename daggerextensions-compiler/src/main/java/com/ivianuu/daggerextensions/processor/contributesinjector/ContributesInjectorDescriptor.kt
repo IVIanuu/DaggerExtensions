@@ -14,19 +14,14 @@
  * limitations under the License.
  */
 
-package com.ivianuu.daggerextensions.injectorregistry
+package com.ivianuu.daggerextensions.processor.contributesinjector
 
-import com.squareup.javapoet.ClassName
 import javax.lang.model.element.Element
 
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-data class InjectorRegistryDescriptor(
-    val element: Element,
-    val target: ClassName,
-    val type: ClassName,
-    val hasInjectorName: ClassName,
-    val mapKeyName: ClassName,
-    val injectionModuleName: ClassName
+data class ContributesInjectorDescriptor(
+    val element: Element
+
 )

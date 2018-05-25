@@ -20,6 +20,7 @@ import com.ivianuu.daggerextensions.processor.util.toLowerCaseCamel
 import com.squareup.javapoet.*
 import dagger.MapKey
 import dagger.Module
+import dagger.android.AndroidInjector
 import dagger.multibindings.Multibinds
 import javax.lang.model.element.Modifier
 
@@ -44,7 +45,7 @@ class InjectorRegistryGenerator(private val descriptor: InjectorRegistryDescript
                     .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
                     .returns(
                         ParameterizedTypeName.get(
-                            ClassName.bestGuess("dagger.android.AndroidInjector"),
+                            ClassName.get(AndroidInjector::class.java),
                             descriptor.type
                         )
                     )
@@ -87,7 +88,7 @@ class InjectorRegistryGenerator(private val descriptor: InjectorRegistryDescript
                                 WildcardTypeName.subtypeOf(descriptor.type)
                             ),
                             ParameterizedTypeName.get(
-                                ClassName.bestGuess("dagger.android.AndroidInjector.Factory"),
+                                ClassName.get(AndroidInjector.Factory::class.java),
                                 WildcardTypeName.subtypeOf(descriptor.type)
                             )
                         )

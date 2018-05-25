@@ -35,6 +35,7 @@ dependencies {
     kapt Deps.autoService
 
     implementation Deps.dagger
+    implementation Deps.daggerAndroidProcessor
 
     implementation project(':daggerextensions-annotations')
 
