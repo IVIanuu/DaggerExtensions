@@ -19,15 +19,10 @@ package com.ivianuu.daggerextensions
 import kotlin.reflect.KClass
 
 /**
- * Creates a [dagger.Component] for the annotated class
+ * @author Manuel Wrage (IVIanuu)
  */
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.CLASS)
-annotation class AutoComponent(
-    val target: KClass<*> = Unit::class,
-    val modules: Array<KClass<*>> = [],
-    val dependencies: Array<KClass<*>> = [],
-    val subcomponents: Array<KClass<*>> = [],
-    val injects: Array<KClass<*>> = [],
-    val superInterfaces: Array<KClass<*>> = []
+annotation class ContributesInjector(
+    val modules: Array<KClass<*>> = []
 )

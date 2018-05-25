@@ -24,6 +24,7 @@ import kotlin.reflect.KClass
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.CLASS)
 annotation class AutoSubcomponent(
+    val target: KClass<*> = Unit::class,
     val modules: Array<KClass<*>> = [],
     val injects: Array<KClass<*>> = [],
     val superInterfaces: Array<KClass<*>> = []

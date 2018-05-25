@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import com.ivianuu.daggerextensions.AutoContribute
 import com.ivianuu.daggerextensions.BindsTo
 import com.ivianuu.daggerextensions.sample.R
@@ -13,11 +14,13 @@ import com.ivianuu.daggerextensions.sample.child.OtherChildFragmentBuilder
 import com.ivianuu.daggerextensions.sample.injection.ActivityBindingModule
 import com.ivianuu.daggerextensions.sample.injection.ActivityBindingSet
 import com.ivianuu.daggerextensions.sample.injection.PerActivity
+import com.ivianuu.daggerextensions.sample.injector.HasViewInjector
 import com.ivianuu.daggerextensions.sample.multibinding.Logger
 import com.ivianuu.daggerextensions.sample.multibinding.MediaPlayer
 import com.ivianuu.daggerextensions.sample.multibinding.Pizza
 import com.ivianuu.daggerextensions.sample.multibinding.Translator
 import dagger.android.AndroidInjection
+import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import javax.inject.Inject
@@ -26,7 +29,9 @@ import javax.inject.Inject
 @PerActivity
 @ActivityBindingSet
 @AutoContribute(modules = [OtherChildFragmentBuilder::class, MainFragmentBuilder::class])
-class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
+class MainActivity : AppCompatActivity(), HasSupportFragmentInjector, HasViewInjector {
+
+    override fun viewInjector() = AndroidInjector<View> { }
 
     @Inject lateinit var app: Application
     @Inject lateinit var loggers: Set<@JvmSuppressWildcards Logger>
@@ -47,6 +52,7 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
     }
 
     override fun supportFragmentInjector() = supportFragmentInjector
+
 }
 
 

@@ -14,20 +14,15 @@
  * limitations under the License.
  */
 
-package com.ivianuu.daggerextensions
+package com.ivianuu.daggerextensions.sample.child
 
-import kotlin.reflect.KClass
+import com.ivianuu.daggerextensions.AutoComponent
 
 /**
- * Creates a [dagger.Component] for the annotated class
+ * @author Manuel Wrage (IVIanuu)
  */
-@Retention(AnnotationRetention.RUNTIME)
-@Target(AnnotationTarget.CLASS)
-annotation class AutoComponent(
-    val target: KClass<*> = Unit::class,
-    val modules: Array<KClass<*>> = [],
-    val dependencies: Array<KClass<*>> = [],
-    val subcomponents: Array<KClass<*>> = [],
-    val injects: Array<KClass<*>> = [],
-    val superInterfaces: Array<KClass<*>> = []
-)
+@AutoComponent(target = Real::class)
+interface Test
+
+
+class Real
