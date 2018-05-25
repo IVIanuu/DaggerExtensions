@@ -21,6 +21,6 @@ import kotlin.reflect.KClass
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-@Retention(AnnotationRetention.SOURCE)
+@Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.CLASS)
 annotation class AutoBindsIntoSet(val type: KClass<*>)

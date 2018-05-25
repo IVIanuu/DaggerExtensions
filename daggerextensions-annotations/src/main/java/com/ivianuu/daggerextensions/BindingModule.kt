@@ -19,6 +19,6 @@ package com.ivianuu.daggerextensions
 /**
  * Bundles multiple [AutoContribute] annotated components to a single module
  */
-@Retention(AnnotationRetention.SOURCE)
+@Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.ANNOTATION_CLASS)
 annotation class BindingModule
