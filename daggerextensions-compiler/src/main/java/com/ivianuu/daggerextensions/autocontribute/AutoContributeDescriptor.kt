@@ -30,21 +30,17 @@ data class AutoContributeDescriptor(
     val target: ClassName,
     val builder: ClassName,
     val modules: Set<Module>,
-    val scopes: Set<AnnotationMirror>,
-    val bindings: Set<ClassName>,
-    val bindingsModule: ClassName
+    val scopes: Set<AnnotationMirror>
 ) {
 
     class Builder internal constructor(
         val element: TypeElement,
         val target: ClassName,
-        val builder: ClassName,
-        val bindingsModule: ClassName
+        val builder: ClassName
     ) {
 
         private val modules = mutableSetOf<Module>()
         private val scopes = mutableSetOf<AnnotationMirror>()
-        private val bindings = mutableSetOf<ClassName>()
 
         fun addModule(module: Module): Builder {
             modules.add(module)
@@ -55,11 +51,6 @@ data class AutoContributeDescriptor(
             scopes.add(scope)
             return this
         }
-        
-        fun addBinding(binding: String): Builder {
-            bindings.add(ClassName.bestGuess(binding))
-            return this
-        }
 
         fun build(): AutoContributeDescriptor {
             return AutoContributeDescriptor(
@@ -67,9 +58,7 @@ data class AutoContributeDescriptor(
                 target,
                 builder,
                 modules,
-                scopes,
-                bindings,
-                bindingsModule
+                scopes
             )
         }
 
@@ -80,8 +69,7 @@ data class AutoContributeDescriptor(
         fun builder(element: TypeElement): Builder {
             val target = ClassName.get(element)
             val builder = ClassName.bestGuess(target.toString() + "Builder")
-            val bindingsModule = builder.nestedClass("${target.simpleName()}Bindings")
-            return Builder(element, target, builder, bindingsModule)
+            return Builder(element, target, builder)
         }
 
     }

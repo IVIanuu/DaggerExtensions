@@ -16,9 +16,11 @@
 
 package com.ivianuu.daggerextensions
 
+import kotlin.reflect.KClass
+
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-
-@BindingModule
-annotation class MyBindingModule
+@Retention(AnnotationRetention.RUNTIME)
+@Target(AnnotationTarget.CLASS)
+annotation class BindsTo(val types: Array<KClass<*>> = [])

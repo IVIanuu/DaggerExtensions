@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
-package com.ivianuu.daggerextensions
+package com.ivianuu.daggerextensions.bindsto
 
-import kotlin.reflect.KClass
+import com.squareup.javapoet.ClassName
+import javax.lang.model.element.Element
 
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-@Retention(AnnotationRetention.RUNTIME)
-@Target(AnnotationTarget.CLASS)
-annotation class BindsTypes(val types: Array<KClass<*>> = [])
+data class BindsToDescriptor(
+    val element: Element,
+    val type: ClassName,
+    val moduleName: ClassName,
+    val types: Set<ClassName>
+)

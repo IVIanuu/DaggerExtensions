@@ -18,9 +18,7 @@ package com.ivianuu.daggerextensions.autocomponent
 
 import com.ivianuu.daggerextensions.util.toLowerCaseCamel
 import com.squareup.javapoet.*
-import dagger.Binds
 import dagger.BindsInstance
-import dagger.Module
 import javax.lang.model.element.Modifier
 
 class AutoComponentGenerator(private val descriptor: AutoComponentDescriptor) {
@@ -35,10 +33,6 @@ class AutoComponentGenerator(private val descriptor: AutoComponentDescriptor) {
             .addMethods(injectMethods())
             .addMethods(subcomponentMethods())
             .addType(componentBuilder())
-
-        if (descriptor.bindings.isNotEmpty()) {
-            component.addType(buildBindingModule())
-        }
 
         return JavaFile.builder(descriptor.component.packageName(), component.build())
             .build()
@@ -58,18 +52,7 @@ class AutoComponentGenerator(private val descriptor: AutoComponentDescriptor) {
             annotation.addMember("dependencies", "\$T.class", it)
         }
 
-        val modules = descriptor.modules.toMutableSet()
-        if (descriptor.bindings.isNotEmpty()) {
-            modules.add(
-                com.ivianuu.daggerextensions.util.Module(
-                    descriptor.bindingsModule, setOf(
-                        Modifier.PUBLIC, Modifier.ABSTRACT
-                    )
-                )
-            )
-        }
-
-        modules
+        descriptor.modules
             .map { it.name }
             .forEach {
                 annotation.addMember("modules", "\$T.class", it)
@@ -100,25 +83,6 @@ class AutoComponentGenerator(private val descriptor: AutoComponentDescriptor) {
                     .returns(builderName)
                     .build()
             }
-    }
-
-    private fun buildBindingModule(): TypeSpec {
-        val type = TypeSpec.classBuilder(descriptor.bindingsModule)
-            .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.ABSTRACT)
-            .addAnnotation(Module::class.java)
-
-        descriptor.bindings.forEach { type.addMethod(bindsMethod(it)) }
-
-        return type.build()
-    }
-
-    private fun bindsMethod(type: ClassName): MethodSpec {
-        return MethodSpec.methodBuilder("bind${type.simpleName()}")
-            .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
-            .addAnnotation(Binds::class.java)
-            .addParameter(descriptor.target, descriptor.target.simpleName().toLowerCaseCamel())
-            .returns(type)
-            .build()
     }
 
     private fun componentBuilder(): TypeSpec {

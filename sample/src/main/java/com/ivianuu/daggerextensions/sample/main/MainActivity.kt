@@ -7,9 +7,8 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
 import com.ivianuu.daggerextensions.AutoContribute
-import com.ivianuu.daggerextensions.BindsTypes
+import com.ivianuu.daggerextensions.BindsTo
 import com.ivianuu.daggerextensions.sample.R
-import com.ivianuu.daggerextensions.sample.child.OtherChildFragmentBuilder
 import com.ivianuu.daggerextensions.sample.injection.ActivityBindingModule
 import com.ivianuu.daggerextensions.sample.injection.PerActivity
 import com.ivianuu.daggerextensions.sample.multibinding.Logger
@@ -23,7 +22,7 @@ import javax.inject.Inject
 
 @ActivityBindingModule
 @PerActivity
-@BindsTypes(types = [Activity::class, AppCompatActivity::class, FragmentActivity::class])
+@BindsTo(types = [Activity::class, AppCompatActivity::class, FragmentActivity::class])
 @AutoContribute(modules = [OtherChildFragmentBuilder::class, MainFragmentBuilder::class])
 class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
 
@@ -51,6 +50,6 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
 
 @ActivityBindingModule
 @PerActivity
-@BindsTypes(types = [Activity::class, AppCompatActivity::class, FragmentActivity::class])
+@BindsTo(types = [Activity::class, AppCompatActivity::class, FragmentActivity::class])
 @AutoContribute
 class OtherActivity : AppCompatActivity()

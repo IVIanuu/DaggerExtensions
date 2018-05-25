@@ -22,3 +22,5 @@ package com.ivianuu.daggerextensions
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.ANNOTATION_CLASS)
 annotation class BindingModule
+
+// todo allow custom name and package

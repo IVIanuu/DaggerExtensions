@@ -30,3 +30,7 @@ fun Element.intoMapName(): ClassName {
 fun Element.autoContributeName(): ClassName {
     return ClassName.bestGuess(asType().toString() + "Builder")
 }
+
+fun Element.bindsToName(): ClassName {
+    return ClassName.bestGuess(asType().toString() + "Bindings")
+}

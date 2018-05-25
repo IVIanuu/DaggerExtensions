@@ -22,14 +22,16 @@ import com.google.auto.common.MoreElements
 import com.google.common.collect.SetMultimap
 import com.ivianuu.daggerextensions.AutoComponent
 import com.ivianuu.daggerextensions.AutoSubcomponent
-import com.ivianuu.daggerextensions.BindsTypes
+import com.ivianuu.daggerextensions.BindsTo
 import com.ivianuu.daggerextensions.util.Module
+import com.ivianuu.daggerextensions.util.bindsToName
 import com.ivianuu.daggerextensions.util.getClassArrayValues
 import com.ivianuu.daggerextensions.util.writeFile
 import com.squareup.javapoet.ClassName
 import javax.annotation.processing.ProcessingEnvironment
 import javax.inject.Scope
 import javax.lang.model.element.Element
+import javax.lang.model.element.Modifier
 import javax.lang.model.element.TypeElement
 
 class AutoComponentProcessingStep(private val processingEnv: ProcessingEnvironment) : BasicAnnotationProcessor.ProcessingStep {
@@ -64,11 +66,6 @@ class AutoComponentProcessingStep(private val processingEnv: ProcessingEnvironme
         val builder =
             AutoComponentDescriptor.builder(element, type)
 
-        MoreElements.getAnnotationMirror(
-            element, BindsTypes::class.java).orNull()
-            ?.getClassArrayValues("types")
-            ?.forEach { builder.addBinding(it) }
-
         AnnotationMirrors.getAnnotatedAnnotations(element, Scope::class.java)
             .forEach { builder.addScope(it) }
 
@@ -94,6 +91,15 @@ class AutoComponentProcessingStep(private val processingEnv: ProcessingEnvironme
                 Module(ClassName.get(moduleType), moduleType.modifiers)
             }
             .forEach { builder.addModule(it) }
+
+        // auto include binding modules
+        if (MoreElements.isAnnotationPresent(element, BindsTo::class.java)) {
+            builder.addModule(
+                Module(
+                    element.bindsToName(), setOf(Modifier.PUBLIC, Modifier.ABSTRACT)
+                )
+            )
+        }
 
         if (type == ComponentType.COMPONENT) {
             // subcomponents

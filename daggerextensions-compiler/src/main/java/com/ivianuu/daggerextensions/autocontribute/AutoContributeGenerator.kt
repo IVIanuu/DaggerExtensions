@@ -16,10 +16,7 @@
 
 package com.ivianuu.daggerextensions.autocontribute
 
-import com.ivianuu.daggerextensions.util.toLowerCaseCamel
 import com.squareup.javapoet.*
-import dagger.Binds
-import dagger.Module
 import javax.lang.model.element.Modifier
 
 /**
@@ -32,10 +29,6 @@ class AutoContributeGenerator(private val descriptor: AutoContributeDescriptor) 
             .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
             .addAnnotation(dagger.Module::class.java)
             .addMethod(buildContributeMethod())
-
-        if (descriptor.bindings.isNotEmpty()) {
-            type.addType(buildBindingModule())
-        }
 
         return JavaFile.builder(descriptor.builder.packageName(), type.build())
             .build()
@@ -51,43 +44,13 @@ class AutoContributeGenerator(private val descriptor: AutoContributeDescriptor) 
 
         val annotation = AnnotationSpec.builder(CLASS_CONTRIBUTES_ANDROID_INJECTOR)
 
-        val modules = descriptor.modules.toMutableSet()
-        if (descriptor.bindings.isNotEmpty()) {
-            modules.add(
-                com.ivianuu.daggerextensions.util.Module(
-                    descriptor.bindingsModule, setOf(
-                        Modifier.PUBLIC, Modifier.ABSTRACT
-                    )
-                )
-            )
-        }
-
-        modules
+        descriptor.modules
             .map { it.name }
             .forEach { annotation.addMember("modules", "\$T.class", it) }
 
         method.addAnnotation(annotation.build())
 
         return method.build()
-    }
-
-    private fun buildBindingModule(): TypeSpec {
-        val type = TypeSpec.classBuilder(descriptor.bindingsModule)
-            .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
-            .addAnnotation(Module::class.java)
-
-        descriptor.bindings.forEach { type.addMethod(bindsMethod(it)) }
-
-        return type.build()
-    }
-
-    private fun bindsMethod(type: ClassName): MethodSpec {
-        return MethodSpec.methodBuilder("bind${type.simpleName()}")
-            .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
-            .addAnnotation(Binds::class.java)
-            .addParameter(descriptor.target, descriptor.target.simpleName().toLowerCaseCamel())
-            .returns(type)
-            .build()
     }
 
     private companion object {

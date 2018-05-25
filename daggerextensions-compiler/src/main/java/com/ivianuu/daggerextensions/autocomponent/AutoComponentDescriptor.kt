@@ -32,9 +32,7 @@ data class AutoComponentDescriptor(
     val dependencies: Set<ClassName>,
     val scopes: Set<AnnotationMirror>,
     val subcomponents: Set<ClassName>,
-    val superInterfaces: Set<ClassName>,
-    val bindings: Set<ClassName>,
-    val bindingsModule: ClassName
+    val superInterfaces: Set<ClassName>
 ) {
 
     class Builder internal constructor(
@@ -42,8 +40,7 @@ data class AutoComponentDescriptor(
         val element: TypeElement,
         val target: ClassName,
         val componentName: ClassName,
-        val componentBuilderName: ClassName,
-        val bindingsModule: ClassName
+        val componentBuilderName: ClassName
     ) {
 
         private val injectClasses = mutableSetOf<ClassName>()
@@ -52,7 +49,6 @@ data class AutoComponentDescriptor(
         private val scopes = mutableSetOf<AnnotationMirror>()
         private val subcomponents = mutableSetOf<ClassName>()
         private val superInterfaces = mutableSetOf<ClassName>()
-        private val bindings = mutableSetOf<ClassName>()
 
         fun addInjectClass(injectClass: String): Builder {
             injectClasses.add(ClassName.bestGuess(injectClass))
@@ -84,11 +80,6 @@ data class AutoComponentDescriptor(
             return this
         }
 
-        fun addBinding(binding: String): Builder {
-            bindings.add(ClassName.bestGuess(binding))
-            return this
-        }
-
         fun build(): AutoComponentDescriptor {
             return AutoComponentDescriptor(
                 type,
@@ -101,9 +92,7 @@ data class AutoComponentDescriptor(
                 dependencies,
                 scopes,
                 subcomponents,
-                superInterfaces,
-                bindings,
-                bindingsModule
+                superInterfaces
             )
         }
 
@@ -115,8 +104,7 @@ data class AutoComponentDescriptor(
             val target = ClassName.get(element)
             val component = ClassName.bestGuess(target.toString() + "Component")
             val componentBuilder = component.nestedClass("Builder")
-            val bindingModule = component.nestedClass(target.simpleName() + "Bindings")
-            return Builder(type, element, target, component, componentBuilder, bindingModule)
+            return Builder(type, element, target, component, componentBuilder)
         }
 
     }

@@ -21,15 +21,13 @@ import com.google.auto.common.BasicAnnotationProcessor
 import com.google.auto.common.MoreElements
 import com.google.common.collect.SetMultimap
 import com.ivianuu.daggerextensions.AutoContribute
-import com.ivianuu.daggerextensions.BindsTypes
-import com.ivianuu.daggerextensions.util.Module
-import com.ivianuu.daggerextensions.util.getClassArrayValues
-import com.ivianuu.daggerextensions.util.n
-import com.ivianuu.daggerextensions.util.writeFile
+import com.ivianuu.daggerextensions.BindsTo
+import com.ivianuu.daggerextensions.util.*
 import com.squareup.javapoet.ClassName
 import javax.annotation.processing.ProcessingEnvironment
 import javax.inject.Scope
 import javax.lang.model.element.Element
+import javax.lang.model.element.Modifier
 import javax.lang.model.element.TypeElement
 
 /**
@@ -62,17 +60,11 @@ class AutoContributeProcessingStep(
 
         processingEnv.n { "create auto contribute for ${element.simpleName}" }
 
-        MoreElements.getAnnotationMirror(element, BindsTypes::class.java).orNull()
-            ?.getClassArrayValues("types")
-            ?.forEach { builder.addBinding(it) }
-
-        // scopes
         AnnotationMirrors.getAnnotatedAnnotations(element, Scope::class.java)
             .forEach { builder.addScope(it) }
 
         val annotation = MoreElements.getAnnotationMirror(element, AutoContribute::class.java).get()
 
-        // modules
         annotation.getClassArrayValues(
             "modules")
             .map {
@@ -80,6 +72,15 @@ class AutoContributeProcessingStep(
                 Module(ClassName.get(moduleType), moduleType.modifiers)
             }
             .forEach { builder.addModule(it) }
+
+        // auto include binding modules
+        if (MoreElements.isAnnotationPresent(element, BindsTo::class.java)) {
+            builder.addModule(
+                Module(
+                    element.bindsToName(), setOf(Modifier.PUBLIC, Modifier.ABSTRACT)
+                )
+            )
+        }
 
         return builder
     }

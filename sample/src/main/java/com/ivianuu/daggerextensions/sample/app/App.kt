@@ -2,7 +2,7 @@ package com.ivianuu.daggerextensions.sample.app
 
 import android.app.Application
 import com.ivianuu.daggerextensions.AutoComponent
-import com.ivianuu.daggerextensions.BindsTypes
+import com.ivianuu.daggerextensions.BindsTo
 import com.ivianuu.daggerextensions.sample.injection.ActivityBindingModule_
 import com.ivianuu.daggerextensions.sample.injection.ServiceBindingModule_
 import com.ivianuu.daggerextensions.sample.multibinding.*
@@ -17,7 +17,7 @@ import javax.inject.Singleton
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-@BindsTypes(types = [Application::class])
+@BindsTo(types = [Application::class])
 @Singleton
 @AutoComponent(
     modules = [
