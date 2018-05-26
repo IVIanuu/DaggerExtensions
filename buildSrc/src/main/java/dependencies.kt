@@ -11,6 +11,8 @@ object Versions {
 
     const val androidGradlePlugin = "3.1.2"
 
+    const val archComponentsWork = "1.0.0-alpha02"
+
     const val autoCommon = "0.8"
     const val autoService = "1.0-rc3"
 
@@ -27,6 +29,8 @@ object Versions {
 
 object Deps {
     const val androidGradlePlugin = "com.android.tools.build:gradle:${Versions.androidGradlePlugin}"
+
+    const val archComponentsWorkRuntime = "android.arch.work:work-runtime-ktx:${Versions.archComponentsWork}"
 
     const val autoCommon = "com.google.auto:auto-common:${Versions.autoCommon}"
 
