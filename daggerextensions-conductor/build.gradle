@@ -22,7 +22,7 @@ apply plugin: 'maven-publish'
 
 group='com.github.ivianuu'
 
-def artifactId = 'daggerextensions-view'
+def artifactId = 'daggerextensions-conductor'
 def groupId = 'com.ivianuu'
 
 android {
