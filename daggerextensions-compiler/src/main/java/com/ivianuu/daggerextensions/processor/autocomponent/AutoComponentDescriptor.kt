@@ -101,7 +101,11 @@ data class AutoComponentDescriptor(
     companion object {
 
         fun builder(element: TypeElement, target: ClassName, type: ComponentType): Builder {
-            val component = ClassName.bestGuess(target.toString() + "Component")
+            val component = if (target.toString().endsWith("Component")) {
+                ClassName.bestGuess(target.toString() + "_")
+            } else {
+                ClassName.bestGuess(target.toString() + "Component")
+            }
             val componentBuilder = component.nestedClass("Builder")
             return Builder(type, element, target, component, componentBuilder)
         }
