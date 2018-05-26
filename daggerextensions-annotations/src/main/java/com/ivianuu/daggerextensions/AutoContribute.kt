@@ -3,7 +3,7 @@ package com.ivianuu.daggerextensions
 import kotlin.reflect.KClass
 
 /**
- * Automatically creates contributes android injector boilerplate
+ * Automatically creates @ContributesAndroidInjector boilerplate
  */
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.CLASS)

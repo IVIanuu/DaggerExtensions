@@ -22,6 +22,7 @@ import android.app.Service
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import com.ivianuu.daggerextensions.BindingSet
 
 @BindingSet([Application::class])
@@ -35,3 +36,6 @@ annotation class FragmentBindingSet
 
 @BindingSet([Service::class])
 annotation class ServiceBindingSet
+
+@BindingSet([View::class])
+annotation class ViewBindingSet

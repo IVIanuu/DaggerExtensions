@@ -19,7 +19,7 @@ package com.ivianuu.daggerextensions
 import kotlin.reflect.KClass
 
 /**
- * Creates a module with binding methods for [types]
+ * Creates a [dagger.Module] with [dagger.Binds] methods for any of [types]
  */
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.CLASS)

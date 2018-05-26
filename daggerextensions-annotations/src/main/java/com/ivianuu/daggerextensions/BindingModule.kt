@@ -17,7 +17,7 @@
 package com.ivianuu.daggerextensions
 
 /**
- * Bundles multiple [AutoContribute], [AutoBindsIntoMap] annotated components to a single module
+ * Bundles multiple [AutoContribute], [AutoBindsIntoMap] or [AutoBindsIntoSet] annotated components to a single module
  */
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.ANNOTATION_CLASS)

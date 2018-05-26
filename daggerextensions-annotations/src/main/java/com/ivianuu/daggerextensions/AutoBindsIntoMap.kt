@@ -19,7 +19,7 @@ package com.ivianuu.daggerextensions
 import kotlin.reflect.KClass
 
 /**
- * Creates a module with the binds into map method for the annotated type
+ * Creates a [dagger.Module] with the [dagger.Binds] [dagger.multibindings.IntoMap] method for the annotated type
  */
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.CLASS)

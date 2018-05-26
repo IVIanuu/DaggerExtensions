@@ -18,9 +18,10 @@ package com.ivianuu.daggerextensions.sample.injector
 
 import android.view.View
 import com.ivianuu.daggerextensions.InjectorCreator
+import com.ivianuu.daggerextensions.InjectorKeyRegistry
 
-/**
- * @author Manuel Wrage (IVIanuu)
- */
+@InjectorKeyRegistry([ViewKey::class])
+interface InjectorKeyRegistry
+
 @InjectorCreator([View::class])
-interface ViewInjectorRegistry
+interface ViewInjectorCreator

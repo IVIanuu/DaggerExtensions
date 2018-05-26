@@ -26,9 +26,6 @@ import com.ivianuu.daggerextensions.key.AutoStringKey
 @BindingModule
 annotation class MyBindingModule
 
-/**
- * @author Manuel Wrage (IVIanuu)
- */
 @MyBindingModule
 @AutoContribute
 class MyActivity : Activity()

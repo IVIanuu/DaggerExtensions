@@ -1,12 +1,10 @@
 package com.ivianuu.daggerextensions.sample.app
 
 import com.ivianuu.daggerextensions.AutoComponent
-import com.ivianuu.daggerextensions.InjectorKeyRegistry
 import com.ivianuu.daggerextensions.sample.injection.ActivityBindingModule_
 import com.ivianuu.daggerextensions.sample.injection.AppBindingSet
 import com.ivianuu.daggerextensions.sample.injection.ServiceBindingModule_
 import com.ivianuu.daggerextensions.sample.injector.ViewInjectionModule
-import com.ivianuu.daggerextensions.sample.injector.ViewKey
 import com.ivianuu.daggerextensions.sample.multibinding.*
 import com.ivianuu.daggerextensions.sample.sub.SomethingComponent
 import dagger.android.AndroidInjectionModule
@@ -15,9 +13,6 @@ import dagger.android.support.AndroidSupportInjectionModule
 import dagger.android.support.DaggerApplication
 import javax.inject.Inject
 import javax.inject.Singleton
-
-@InjectorKeyRegistry([ViewKey::class])
-interface InjectorKeyRegistry
 
 @AppBindingSet
 @Singleton

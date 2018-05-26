@@ -19,7 +19,7 @@ package com.ivianuu.daggerextensions
 import kotlin.reflect.KClass
 
 /**
- * Creates a [dagger.Subcomponent] for the annotated class
+ * Creates a [dagger.Subcomponent] with the specified options
  */
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.CLASS)

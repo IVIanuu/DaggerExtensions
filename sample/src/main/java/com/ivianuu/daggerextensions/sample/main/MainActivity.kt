@@ -10,12 +10,8 @@ import android.view.View
 import com.ivianuu.daggerextensions.AutoContribute
 import com.ivianuu.daggerextensions.BindsTo
 import com.ivianuu.daggerextensions.sample.R
-import com.ivianuu.daggerextensions.sample.injection.ActivityBindingModule
-import com.ivianuu.daggerextensions.sample.injection.ActivityBindingSet
-import com.ivianuu.daggerextensions.sample.injection.FragmentBindingModule_
-import com.ivianuu.daggerextensions.sample.injection.PerActivity
+import com.ivianuu.daggerextensions.sample.injection.*
 import com.ivianuu.daggerextensions.sample.injector.HasViewInjector
-import com.ivianuu.daggerextensions.sample.injector.MyViewBuilder
 import com.ivianuu.daggerextensions.sample.multibinding.Logger
 import com.ivianuu.daggerextensions.sample.multibinding.MediaPlayer
 import com.ivianuu.daggerextensions.sample.multibinding.Pizza
@@ -28,7 +24,7 @@ import javax.inject.Inject
 @ActivityBindingModule
 @PerActivity
 @ActivityBindingSet
-@AutoContribute(modules = [FragmentBindingModule_::class, MyViewBuilder::class])
+@AutoContribute(modules = [FragmentBindingModule_::class, ViewBindingModule_::class])
 class MainActivity : AppCompatActivity(), HasSupportFragmentInjector, HasViewInjector {
 
     @Inject lateinit var app: Application

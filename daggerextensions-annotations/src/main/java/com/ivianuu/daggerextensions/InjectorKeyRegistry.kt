@@ -19,7 +19,7 @@ package com.ivianuu.daggerextensions
 import kotlin.reflect.KClass
 
 /**
- * @author Manuel Wrage (IVIanuu)
+ * A list of [dagger.MapKey] annotated classes which will be used in the project
  */
 @Retention(AnnotationRetention.RUNTIME)
 annotation class InjectorKeyRegistry(
