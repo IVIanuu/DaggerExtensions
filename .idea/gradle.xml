@@ -12,6 +12,8 @@
             <option value="$PROJECT_DIR$/daggerextensions" />
             <option value="$PROJECT_DIR$/daggerextensions-annotations" />
             <option value="$PROJECT_DIR$/daggerextensions-compiler" />
+            <option value="$PROJECT_DIR$/daggerextensions-conductor" />
+            <option value="$PROJECT_DIR$/daggerextensions-view" />
             <option value="$PROJECT_DIR$/sample" />
           </set>
         </option>

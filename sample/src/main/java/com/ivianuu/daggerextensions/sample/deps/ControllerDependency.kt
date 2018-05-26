@@ -14,21 +14,12 @@
  * limitations under the License.
  */
 
-package com.ivianuu.daggerextensions.sample.injection
+package com.ivianuu.daggerextensions.sample.deps
 
-import javax.inject.Scope
+import com.ivianuu.daggerextensions.sample.controller.LoginController
+import javax.inject.Inject
 
-@Scope
-annotation class PerActivity
-
-@Scope
-annotation class PerChildFragment
-
-@Scope
-annotation class PerController
-
-@Scope
-annotation class PerFragment
-
-@Scope
-annotation class PerView
+/**
+ * @author Manuel Wrage (IVIanuu)
+ */
+class ControllerDependency @Inject constructor(loginController: LoginController)

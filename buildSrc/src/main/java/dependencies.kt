@@ -3,7 +3,8 @@
 object Versions {
     // android
     const val compileSdk = 27
-    const val minSdk = 16
+    const val minSdk = 14
+    const val minSdkConductor = 16
     const val targetSdk = 27
     const val versionCode = 1
     const val versionName = "1.0"
@@ -13,6 +14,8 @@ object Versions {
     const val autoCommon = "0.8"
     const val autoService = "1.0-rc3"
 
+    const val conductor = "2.1.4"
+
     const val dagger = "2.16"
 
     const val javaPoet = "1.11.1"
@@ -21,13 +24,15 @@ object Versions {
     const val mavenGradlePlugin = "2.1"
     const val support = "27.1.1"
 }
-//
+
 object Deps {
     const val androidGradlePlugin = "com.android.tools.build:gradle:${Versions.androidGradlePlugin}"
 
     const val autoCommon = "com.google.auto:auto-common:${Versions.autoCommon}"
 
     const val autoService = "com.google.auto.service:auto-service:${Versions.autoService}"
+
+    const val conductor = "com.bluelinelabs:conductor:${Versions.conductor}"
 
     const val dagger = "com.google.dagger:dagger:${Versions.dagger}"
     const val daggerCompiler = "com.google.dagger:dagger-compiler:${Versions.dagger}"

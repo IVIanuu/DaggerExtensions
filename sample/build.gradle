@@ -24,7 +24,7 @@ android {
 
     defaultConfig {
         applicationId "com.ivianuu.daggerextensions.sample"
-        minSdkVersion Versions.minSdk
+        minSdkVersion Versions.minSdkConductor
         targetSdkVersion Versions.targetSdk
         versionCode Versions.versionCode
         versionName Versions.versionName
@@ -40,6 +40,8 @@ android {
 
 dependencies {
     implementation project(':daggerextensions')
+    implementation project(':daggerextensions-conductor')
+    implementation project(':daggerextensions-view')
     kapt project(':daggerextensions-compiler')
 
     implementation Deps.daggerAndroid

@@ -14,12 +14,17 @@
  * limitations under the License.
  */
 
-package com.ivianuu.daggerextensions.sample.injector
+package com.ivianuu.daggerextensions.view
 
 import android.view.View
+import com.ivianuu.daggerextensions.InjectorCreator
+
+@InjectorCreator([View::class])
+interface ViewInjectorCreator
 
 object ViewInjection {
 
+    @JvmStatic
     fun inject(view: View) {
         val hasViewInjector = findHasViewInjector(view)
         val viewInjector = hasViewInjector.viewInjector()
@@ -27,17 +32,25 @@ object ViewInjection {
     }
 
     private fun findHasViewInjector(view: View): HasViewInjector {
+        if (view.parent != null) {
+            var parent = view.parent
+
+            while (parent != null) {
+                if (parent is HasViewInjector) {
+                    return parent
+                }
+
+                parent = parent.parent
+            }
+        }
+
         if (view.context is HasViewInjector) {
             return view.context as HasViewInjector
         } else if (view.context.applicationContext is HasViewInjector) {
             return view.context.applicationContext as HasViewInjector
         }
 
-        throw IllegalArgumentException(
-            String.format(
-                "No injector was found for %s", view.javaClass.canonicalName
-            )
-        )
+        throw IllegalArgumentException("no injector found for ${view.javaClass.name}")
     }
 
 }

@@ -23,7 +23,7 @@ import com.ivianuu.daggerextensions.AutoContribute
 import com.ivianuu.daggerextensions.sample.deps.AppDependency
 import com.ivianuu.daggerextensions.sample.injection.PerView
 import com.ivianuu.daggerextensions.sample.injection.ViewBindingModule
-import com.ivianuu.daggerextensions.sample.injector.ViewInjection
+import com.ivianuu.daggerextensions.view.ViewInjection
 import javax.inject.Inject
 
 @ViewBindingModule

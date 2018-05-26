@@ -1,12 +1,13 @@
 package com.ivianuu.daggerextensions.sample.app
 
 import com.ivianuu.daggerextensions.AutoComponent
+import com.ivianuu.daggerextensions.conductor.ControllerInjectionModule
 import com.ivianuu.daggerextensions.sample.injection.ActivityBindingModule_
 import com.ivianuu.daggerextensions.sample.injection.AppBindingSet
 import com.ivianuu.daggerextensions.sample.injection.ServiceBindingModule_
-import com.ivianuu.daggerextensions.sample.injector.ViewInjectionModule
 import com.ivianuu.daggerextensions.sample.multibinding.*
 import com.ivianuu.daggerextensions.sample.sub.SomethingComponent
+import com.ivianuu.daggerextensions.view.ViewInjectionModule
 import dagger.android.AndroidInjectionModule
 import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
@@ -20,15 +21,18 @@ import javax.inject.Singleton
     modules = [
         AndroidInjectionModule::class,
         AndroidSupportInjectionModule::class,
+        ControllerInjectionModule::class,
+        ViewInjectionModule::class,
+
         ActivityBindingModule_::class,
+        ServiceBindingModule_::class,
+
         FunghiPizzaModule_::class,
         SalamiPizzaModule_::class,
         SpotifyMediaPlayerModule_::class,
         SoundCloudMediaPlayerModule_::class,
         LoggerModule_::class,
-        TranslatorModule_::class,
-        ServiceBindingModule_::class,
-        ViewInjectionModule::class
+        TranslatorModule_::class
     ],
     injects = [GlideConfig::class],
     superInterfaces = [MySuperInterface::class],
@@ -43,13 +47,7 @@ class App : DaggerApplication() {
     }
 }
 
-interface MySuperInterface {
-    fun inject(controller: Controller)
-}
-
-class Controller {
-    @Inject lateinit var app: App
-}
+interface MySuperInterface
 
 class GlideConfig {
 

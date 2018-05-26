@@ -25,6 +25,9 @@ annotation class ActivityBindingModule
 annotation class ChildFragmentBindingModule
 
 @BindingModule
+annotation class ControllerBindingModule
+
+@BindingModule
 annotation class FragmentBindingModule
 
 @BindingModule

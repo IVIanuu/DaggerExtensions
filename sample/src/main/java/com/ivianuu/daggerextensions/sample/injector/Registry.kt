@@ -16,12 +16,9 @@
 
 package com.ivianuu.daggerextensions.sample.injector
 
-import android.view.View
-import com.ivianuu.daggerextensions.InjectorCreator
 import com.ivianuu.daggerextensions.InjectorKeyRegistry
+import com.ivianuu.daggerextensions.conductor.ControllerKey
+import com.ivianuu.daggerextensions.view.ViewKey
 
-@InjectorKeyRegistry([ViewKey::class])
-interface InjectorKeyRegistry
-
-@InjectorCreator([View::class])
-interface ViewInjectorCreator
+@InjectorKeyRegistry([ControllerKey::class, ViewKey::class])
+interface ViewInjectorKeyRegistry
