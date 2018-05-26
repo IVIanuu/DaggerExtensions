@@ -22,8 +22,6 @@ import com.ivianuu.daggerextensions.AutoBindsIntoMap
 import com.ivianuu.daggerextensions.AutoBindsIntoSet
 import com.ivianuu.daggerextensions.AutoContribute
 import com.ivianuu.daggerextensions.BindingModule
-import com.ivianuu.daggerextensions.processor.autocontribute.ContributionType
-import com.ivianuu.daggerextensions.processor.injector.InjectorKey
 import com.ivianuu.daggerextensions.processor.util.*
 import com.squareup.javapoet.ClassName
 import javax.annotation.processing.ProcessingEnvironment
@@ -71,20 +69,6 @@ class BindingModuleProcessor(private val processingEnv: ProcessingEnvironment) {
             val modules = mutableSetOf<Module>()
 
             if (MoreElements.isAnnotationPresent(element, AutoContribute::class.java)) {
-                val isDaggerSupported = InjectorKey.DAGGER_SUPPORTED_TYPES.any {
-                    processingEnv.typeUtils.isAssignable(
-                        element.asType(),
-                        processingEnv.elementUtils.getTypeElement(it.baseType.toString()).asType()
-                    )
-
-                }
-
-                val type = if (isDaggerSupported) {
-                    ContributionType.ANDROID_INJECTOR
-                } else {
-                    ContributionType.INJECTOR
-                }
-
                 modules.add(
                     Module(
                         element.autoContributeName(), setOf(Modifier.PUBLIC, Modifier.ABSTRACT)
