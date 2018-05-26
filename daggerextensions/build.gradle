@@ -21,9 +21,6 @@ apply plugin: 'maven-publish'
 
 group='com.github.ivianuu'
 
-def artifactId = 'daggerextensions'
-def groupId = 'com.ivianuu'
-
 android {
     compileSdkVersion Versions.compileSdk
 
@@ -60,17 +57,4 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 artifacts {
     archives sourcesJar
     archives javadocJar
-}
-
-publishing {
-    publications {
-        library(MavenPublication) {
-            setGroupId(groupId)
-            setArtifactId(artifactId)
-            version Versions.versionName
-            artifact(bundleRelease)
-            artifact(sourcesJar)
-            artifact(javadocJar)
-        }
-    }
 }

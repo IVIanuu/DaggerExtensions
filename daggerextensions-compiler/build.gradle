@@ -22,9 +22,6 @@ apply plugin: 'maven-publish'
 
 group = 'com.github.ivianuu'
 
-def artifactId = 'daggerextensions-compiler'
-def groupId = 'com.ivianuu'
-
 sourceCompatibility = "1.7"
 targetCompatibility = "1.7"
 
@@ -61,17 +58,4 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 artifacts {
     archives sourcesJar
     archives javadocJar
-}
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            setGroupId(groupId)
-            setArtifactId(artifactId)
-            version Versions.versionName
-            from(components.java)
-            artifact(sourcesJar)
-            artifact(javadocJar)
-        }
-    }
 }
