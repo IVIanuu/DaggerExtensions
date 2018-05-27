@@ -20,7 +20,7 @@ import androidx.work.Worker
 import com.ivianuu.daggerextensions.InjectorCreator
 
 @InjectorCreator([Worker::class])
-interface WorkerInjectorFactory
+interface WorkerInjectorCreator
 
 object WorkerInjection {
 
