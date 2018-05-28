@@ -49,8 +49,9 @@ object ConductorInjection {
             return activity
         }
 
-        if (activity?.application is HasControllerInjector) {
-            return activity.application as HasControllerInjector
+        val application = activity?.application
+        if (application is HasControllerInjector) {
+            return application
         }
 
         throw IllegalArgumentException("no injector found for ${controller.javaClass.name}")

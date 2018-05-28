@@ -20,6 +20,8 @@ object Versions {
 
     const val dagger = "2.16"
 
+    const val glide = "4.7.1"
+
     const val javaPoet = "1.11.1"
 
     const val kotlin = "1.2.41"
@@ -43,6 +45,9 @@ object Deps {
     const val daggerAndroid = "com.google.dagger:dagger-android:${Versions.dagger}"
     const val daggerAndroidSupport = "com.google.dagger:dagger-android-support:${Versions.dagger}"
     const val daggerAndroidProcessor = "com.google.dagger:dagger-android-processor:${Versions.dagger}"
+
+    const val glide = "com.github.bumptech.glide:glide:${Versions.glide}"
+    const val glideCompiler = "com.github.bumptech.glide:compiler:${Versions.glide}"
 
     const val javaPoet = "com.squareup:javapoet:${Versions.javaPoet}"
 

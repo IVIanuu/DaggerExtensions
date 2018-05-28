@@ -33,11 +33,12 @@ object WorkerInjection {
 
     private fun findHasWorkerInjector(worker: Worker): HasWorkerInjector {
         val applicationContext = worker.applicationContext
-        return if (applicationContext is HasWorkerInjector) {
-            applicationContext
-        } else {
-            throw IllegalArgumentException("no injector found for ${worker.javaClass.name}")
+
+        if (applicationContext is HasWorkerInjector) {
+            return applicationContext
         }
+
+        throw IllegalArgumentException("no injector found for ${worker.javaClass.name}")
     }
 
 }
