@@ -18,10 +18,7 @@ package com.ivianuu.daggerextensions.processor.bindingmodule
 
 import com.google.auto.common.AnnotationMirrors
 import com.google.auto.common.MoreElements
-import com.ivianuu.daggerextensions.AutoBindsIntoMap
-import com.ivianuu.daggerextensions.AutoBindsIntoSet
-import com.ivianuu.daggerextensions.AutoContribute
-import com.ivianuu.daggerextensions.BindingModule
+import com.ivianuu.daggerextensions.*
 import com.ivianuu.daggerextensions.processor.util.*
 import com.squareup.javapoet.ClassName
 import javax.annotation.processing.ProcessingEnvironment
@@ -44,6 +41,8 @@ class BindingModuleProcessor(private val processingEnv: ProcessingEnvironment) {
         elements.addAll(roundEnv.getElementsAnnotatedWith(AutoContribute::class.java))
         elements.addAll(roundEnv.getElementsAnnotatedWith(AutoBindsIntoSet::class.java))
         elements.addAll(roundEnv.getElementsAnnotatedWith(AutoBindsIntoMap::class.java))
+        elements.addAll(roundEnv.getElementsAnnotatedWith(BindsTo::class.java))
+        elements.addAll(roundEnv.getElementsAnnotatedWith(CreateBindings::class.java))
 
         createBindingModuleDescriptors(elements)
             .map(BindingModuleDescriptor.Builder::build)
@@ -88,6 +87,24 @@ class BindingModuleProcessor(private val processingEnv: ProcessingEnvironment) {
                 modules.add(
                     Module(
                         element.intoSetName(), setOf(Modifier.PUBLIC, Modifier.ABSTRACT)
+                    )
+                )
+            }
+
+            if (MoreElements.isAnnotationPresent(element, BindsTo::class.java)
+                && modules.isEmpty()) {
+                modules.add(
+                    Module(
+                        element.bindsToName(), setOf(Modifier.PUBLIC, Modifier.ABSTRACT)
+                    )
+                )
+            }
+
+            if (MoreElements.isAnnotationPresent(element, CreateBindings::class.java)
+                && modules.isEmpty()) {
+                modules.add(
+                    Module(
+                        element.bindsToName(), setOf(Modifier.PUBLIC, Modifier.ABSTRACT)
                     )
                 )
             }

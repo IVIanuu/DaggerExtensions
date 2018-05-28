@@ -16,8 +16,12 @@
 
 package com.ivianuu.daggerextensions.sample.bindings
 
+import com.ivianuu.daggerextensions.BindingModule
 import com.ivianuu.daggerextensions.BindingSet
 import com.ivianuu.daggerextensions.CreateBindings
+
+@BindingModule
+annotation class TestBindingModule
 
 abstract class SubClass1
 
@@ -28,6 +32,7 @@ abstract class SubClass3 : SubClass2()
 @BindingSet([SubClass1::class, SubClass2::class, SubClass3::class])
 annotation class SomeBindingSet
 
+@TestBindingModule
 @SomeBindingSet
 @CreateBindings
 class FinalClass : SubClass3()
