@@ -39,6 +39,7 @@ class BindingsProcessingStep(private val processingEnv: ProcessingEnvironment): 
         elements.addAll(elementsByAnnotation[AutoComponent::class.java])
         elements.addAll(elementsByAnnotation[AutoSubcomponent::class.java])
         elements.addAll(elementsByAnnotation[BindsTo::class.java])
+        elements.addAll(elementsByAnnotation[CreateBindings::class.java])
         elements.addAll(elementsByAnnotation[AutoContribute::class.java])
         elements.addAll(elementsByAnnotation[AutoBindsIntoMap::class.java])
         elements.addAll(elementsByAnnotation[AutoBindsIntoSet::class.java])
@@ -59,7 +60,8 @@ class BindingsProcessingStep(private val processingEnv: ProcessingEnvironment): 
         BindsTo::class.java,
         AutoContribute::class.java,
         AutoBindsIntoMap::class.java,
-        AutoBindsIntoSet::class.java
+        AutoBindsIntoSet::class.java,
+        CreateBindings::class.java
     )
 
     private fun isValid(element: Element): Boolean {
