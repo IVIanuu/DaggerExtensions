@@ -105,10 +105,8 @@ class AutoContributeProcessingStep(
 
         annotation.getClassArrayValues(
             "modules")
-            .map {
-                val moduleType = processingEnv.elementUtils.getTypeElement(it)
-                Module(ClassName.get(moduleType), moduleType.modifiers)
-            }
+            .map { processingEnv.elementUtils.getTypeElement(it) }
+            .map { Module(ClassName.get(it), it.modifiers) }
             .forEach { builder.addModule(it) }
 
         // auto include binding modules

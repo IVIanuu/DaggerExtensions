@@ -22,6 +22,7 @@ import com.google.auto.common.MoreTypes
 import com.google.common.collect.Iterables.getOnlyElement
 import com.google.common.collect.SetMultimap
 import com.ivianuu.daggerextensions.InjectorKeyRegistry
+import com.ivianuu.daggerextensions.processor.util.e
 import com.ivianuu.daggerextensions.processor.util.getClassArrayValues
 import com.ivianuu.daggerextensions.processor.util.n
 import com.squareup.javapoet.ClassName
@@ -64,23 +65,20 @@ class InjectorKeyFinderProcessingStep(private val processingEnv: ProcessingEnvir
         val keysValue = annotation.getClassArrayValues("keys")
 
         for (keyClass in keysValue) {
-            val key = processingEnv.elementUtils.getTypeElement(keyClass).asType()
-            // todo
-            /* if (daggerSupportedTypes.containsKey(mapKey)) {
-                messager.printMessage(Diagnostic.Kind.ERROR, String.format("%s is automatically supported", mapKey));
-            }*/
+            val key = processingEnv.elementUtils.getTypeElement(keyClass)
+            // todo check for dagger supported types
 
-            if (MoreElements.isAnnotationPresent(MoreTypes.asElement(key), MapKey::class.java)) {
-                val mapKeyValue = mapKeyValue(key)
+            if (MoreElements.isAnnotationPresent(MoreTypes.asElement(key.asType()), MapKey::class.java)) {
+                val mapKeyValue = mapKeyValue(key.asType())
 
                 injectorKeys.add(
                     InjectorKey(
                         ClassName.bestGuess(mapKeyValue.toString()),
-                        ClassName.bestGuess(key.toString())
+                        ClassName.bestGuess(key.asType().toString())
                     )
                 )
             } else {
-                // todo print
+                processingEnv.e { "map key annotation must be present for $keyClass" }
             }
         }
 
