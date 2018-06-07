@@ -2,10 +2,10 @@
 
 object Versions {
     // android
-    const val compileSdk = 27
+    const val compileSdk = 28
     const val minSdk = 14
     const val minSdkConductor = 16
-    const val targetSdk = 27
+    const val targetSdk = 28
     const val versionCode = 1
     const val versionName = "1.0"
 
@@ -26,7 +26,7 @@ object Versions {
 
     const val kotlin = "1.2.41"
     const val mavenGradlePlugin = "2.1"
-    const val support = "27.1.1"
+    const val support = "28.0.0-alpha3"
 }
 
 object Deps {
