@@ -33,7 +33,7 @@ import javax.lang.model.SourceVersion
  * @author Manuel Wrage (IVIanuu)
  */
 @AutoService(Processor::class)
-class DaggerExtensions : BasicAnnotationProcessor() {
+class DaggerExtensionsProcessor : BasicAnnotationProcessor() {
 
     private val injectorKeyFinder by lazy { InjectorKeyFinderProcessingStep(processingEnv) }
     private val bindingModuleProcessor by lazy { BindingModuleProcessor(processingEnv) }

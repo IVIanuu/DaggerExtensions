@@ -9,7 +9,7 @@ object Versions {
     const val versionCode = 1
     const val versionName = "1.0"
 
-    const val androidGradlePlugin = "3.1.2"
+    const val androidGradlePlugin = "3.1.3"
 
     const val archComponentsWork = "1.0.0-alpha02"
 
@@ -25,6 +25,8 @@ object Versions {
     const val javaPoet = "1.11.1"
 
     const val kotlin = "1.2.41"
+    const val kotlinPoet = "0.7.0"
+
     const val mavenGradlePlugin = "2.1"
     const val support = "28.0.0-alpha3"
 }
@@ -53,6 +55,7 @@ object Deps {
 
     const val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
     const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin}"
+    const val kotlinPoet = "com.squareup:kotlinpoet:${Versions.kotlinPoet}"
 
     const val mavenGradlePlugin = "com.github.dcendents:android-maven-gradle-plugin:${Versions.mavenGradlePlugin}"
 
