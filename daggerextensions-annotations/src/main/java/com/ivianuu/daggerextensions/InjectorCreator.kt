@@ -19,7 +19,7 @@ package com.ivianuu.daggerextensions
 import kotlin.reflect.KClass
 
 /**
- * Generates Has**Injector **Key and **InjectionModule Boilerplate for all of [types]
+ * Generates Has**Injector **Key and **InjectionModule Boilerplate for any of [types]
  */
 @Retention(AnnotationRetention.RUNTIME)
 annotation class InjectorCreator(val types: Array<KClass<*>>)

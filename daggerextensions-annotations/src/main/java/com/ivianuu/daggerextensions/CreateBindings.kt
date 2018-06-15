@@ -17,7 +17,8 @@
 package com.ivianuu.daggerextensions
 
 /**
- * Creates a bindings module for this class
+ * Creates a binding module for this class this can be used when the class is NOT annotated with
+ * AutoContribute etc
  */
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.CLASS)
