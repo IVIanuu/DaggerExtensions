@@ -9,14 +9,14 @@ object Versions {
     const val versionCode = 1
     const val versionName = "1.0"
 
-    const val androidGradlePlugin = "3.1.3"
+    const val androidGradlePlugin = "3.1.4"
 
-    const val archComponentsWork = "1.0.0-alpha02"
+    const val archComponentsWork = "1.0.0-alpha05"
 
     const val autoCommon = "0.10"
     const val autoService = "1.0-rc4"
 
-    const val conductor = "2.1.4"
+    const val conductor = "2.1.5"
 
     const val dagger = "2.16"
 

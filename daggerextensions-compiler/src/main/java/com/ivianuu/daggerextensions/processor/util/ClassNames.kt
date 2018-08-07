@@ -19,22 +19,12 @@ package com.ivianuu.daggerextensions.processor.util
 import com.squareup.javapoet.ClassName
 import javax.lang.model.element.Element
 
-fun Element.intoSetName(): ClassName {
-    return ClassName.bestGuess(asType().toString() + "IntoSet")
-}
+fun Element.intoSetName(): ClassName = ClassName.bestGuess(asType().toString() + "IntoSet")
 
-fun Element.intoMapName(): ClassName {
-    return ClassName.bestGuess(asType().toString() + "IntoMap")
-}
+fun Element.intoMapName(): ClassName = ClassName.bestGuess(asType().toString() + "IntoMap")
 
-fun Element.autoContributeName(): ClassName {
-    return ClassName.bestGuess(asType().toString() + "Builder")
-}
+fun Element.autoContributeName(): ClassName = ClassName.bestGuess(asType().toString() + "Builder")
 
-fun Element.bindsToName(): ClassName {
-    return ClassName.bestGuess(asType().toString() + "Bindings")
-}
+fun Element.bindsToName(): ClassName = ClassName.bestGuess(asType().toString() + "Bindings")
 
-fun ClassName.bindsToName(): ClassName {
-    return ClassName.bestGuess(toString() + "Bindings")
-}
+fun ClassName.bindsToName(): ClassName = ClassName.bestGuess(toString() + "Bindings")

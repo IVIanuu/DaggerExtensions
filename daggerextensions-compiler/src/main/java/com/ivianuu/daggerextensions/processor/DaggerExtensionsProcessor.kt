@@ -40,9 +40,7 @@ class DaggerExtensionsProcessor : BasicAnnotationProcessor() {
 
     override fun initSteps(): MutableIterable<ProcessingStep> {
         return mutableSetOf(
-            InjectorCreatorProcessingStep(
-                processingEnv
-            ),
+                InjectorCreatorProcessingStep(processingEnv),
             injectorKeyFinder,
             MultiBindingProcessingStep(processingEnv),
             AutoContributeProcessingStep(processingEnv, injectorKeyFinder),
@@ -56,7 +54,5 @@ class DaggerExtensionsProcessor : BasicAnnotationProcessor() {
         bindingModuleProcessor.postRound(roundEnv)
     }
 
-    override fun getSupportedSourceVersion(): SourceVersion {
-        return SourceVersion.latest()
-    }
+    override fun getSupportedSourceVersion(): SourceVersion = SourceVersion.latest()
 }
