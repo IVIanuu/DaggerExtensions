@@ -17,8 +17,7 @@
 package com.ivianuu.daggerextensions.sample.injector
 
 import com.ivianuu.daggerextensions.InjectorKeyRegistry
-import com.ivianuu.daggerextensions.conductor.ControllerKey
 import com.ivianuu.daggerextensions.view.ViewKey
 
-@InjectorKeyRegistry([ControllerKey::class, ViewKey::class])
+@InjectorKeyRegistry([ViewKey::class])
 interface ViewInjectorKeyRegistry

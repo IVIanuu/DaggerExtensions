@@ -6,7 +6,7 @@ import kotlin.reflect.KClass
  * Automatically creates @ContributesAndroidInjector boilerplate
  */
 @Retention(AnnotationRetention.RUNTIME)
-@Target(AnnotationTarget.CLASS)
-annotation class AutoContribute(
+@Target(AnnotationTarget.FUNCTION)
+annotation class ContributeInjector(
     val modules: Array<KClass<*>> = []
 )

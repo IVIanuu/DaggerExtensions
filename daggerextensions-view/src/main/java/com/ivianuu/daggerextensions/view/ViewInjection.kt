@@ -17,14 +17,27 @@
 package com.ivianuu.daggerextensions.view
 
 import android.view.View
-import com.ivianuu.daggerextensions.InjectorCreator
+import dagger.MapKey
+import dagger.Module
+import dagger.android.AndroidInjector
+import dagger.multibindings.Multibinds
+import kotlin.reflect.KClass
 
-@InjectorCreator([View::class])
-interface ViewInjectorCreator
+@MapKey
+annotation class ViewKey(val value: KClass<out View>)
+
+interface HasViewInjector {
+    fun viewInjector(): AndroidInjector<View>
+}
+
+@Module
+abstract class ViewInjectionModule {
+    @Multibinds
+    abstract fun viewInjectorFactories(): Map<Class<out View>, AndroidInjector.Factory<out View>>
+}
 
 object ViewInjection {
 
-    @JvmStatic
     fun inject(view: View) {
         val hasViewInjector = findHasViewInjector(view)
         val viewInjector = hasViewInjector.viewInjector()

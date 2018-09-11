@@ -14,35 +14,37 @@
  * limitations under the License.
  */
 
-package com.ivianuu.daggerextensions.processor.autocontribute
+package com.ivianuu.daggerextensions.processor.contributeinjector
 
+import com.google.common.base.CaseFormat
+import com.google.common.base.Joiner
 import com.ivianuu.daggerextensions.processor.util.Module
 import com.squareup.javapoet.ClassName
 import javax.lang.model.element.AnnotationMirror
-import javax.lang.model.element.Element
+import javax.lang.model.element.ExecutableElement
 import javax.lang.model.element.TypeElement
 
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-data class AutoContributeDescriptor(
-    val element: Element,
+data class ContributeInjectorDescriptor(
+    val element: ExecutableElement,
     val target: ClassName,
-    val contributionType: ContributionType,
-    val builder: ClassName,
+    val moduleName: ClassName,
     val modules: Set<Module>,
     val scopes: Set<AnnotationMirror>,
     val subcomponentName: ClassName,
+    val subcomponentBuilderName: ClassName,
     val baseType: ClassName?,
     val mapKey: ClassName?
 ) {
 
     class Builder internal constructor(
-        val element: TypeElement,
+        val element: ExecutableElement,
         val target: ClassName,
-        val contributionType: ContributionType,
-        val builder: ClassName,
+        val moduleName: ClassName,
         val subcomponentName: ClassName,
+        val subcomponenBuilderName: ClassName,
         val baseType: ClassName?,
         val mapKey: ClassName?
     ) {
@@ -60,15 +62,15 @@ data class AutoContributeDescriptor(
             return this
         }
 
-        fun build(): AutoContributeDescriptor {
-            return AutoContributeDescriptor(
+        fun build(): ContributeInjectorDescriptor {
+            return ContributeInjectorDescriptor(
                 element,
                 target,
-                contributionType,
-                builder,
+                moduleName,
                 modules,
                 scopes,
                 subcomponentName,
+                subcomponenBuilderName,
                 baseType,
                 mapKey
             )
@@ -79,15 +81,38 @@ data class AutoContributeDescriptor(
     companion object {
 
         fun builder(
-            element: TypeElement,
-            type: ContributionType,
+            element: ExecutableElement,
             baseType: ClassName?,
             mapKey: ClassName?
         ): Builder {
-            val target = ClassName.get(element)
-            val builder = ClassName.bestGuess(target.toString() + "Builder")
-            val subcomponentName = builder.nestedClass(target.simpleName() + "Subcomponent")
-            return Builder(element, target, type, builder, subcomponentName, baseType, mapKey)
+            val enclosingModule = ClassName.get(element.enclosingElement as TypeElement)
+
+            val moduleName = enclosingModule
+                .topLevelClassName()
+                .peerClass(
+                    Joiner.on('_').join(enclosingModule.simpleNames())
+                            + "_"
+                            + CaseFormat.LOWER_CAMEL.to(
+                        CaseFormat.UPPER_CAMEL,
+                        element.simpleName.toString()
+                    )
+                )
+
+            val target = ClassName.bestGuess(element.returnType.toString())
+
+            val baseName = target.simpleName()
+            val subcomponentName = moduleName.nestedClass(baseName + "Subcomponent")
+            val subcomponenBuilderName = subcomponentName.nestedClass("Builder")
+
+            return Builder(
+                element,
+                target,
+                moduleName,
+                subcomponentName,
+                subcomponenBuilderName,
+                baseType,
+                mapKey
+            )
         }
 
     }

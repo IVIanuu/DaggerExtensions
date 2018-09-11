@@ -14,29 +14,30 @@
  * limitations under the License.
  */
 
-package com.ivianuu.daggerextensions.processor.autocontribute
+package com.ivianuu.daggerextensions.processor.contributeinjector
 
 import com.google.auto.common.AnnotationMirrors
 import com.google.auto.common.BasicAnnotationProcessor
 import com.google.auto.common.MoreElements
 import com.google.common.collect.SetMultimap
-import com.ivianuu.daggerextensions.AutoContribute
-import com.ivianuu.daggerextensions.BindingSet
-import com.ivianuu.daggerextensions.BindsTo
+import com.ivianuu.daggerextensions.ContributeInjector
 import com.ivianuu.daggerextensions.processor.injector.InjectorKey
 import com.ivianuu.daggerextensions.processor.injector.InjectorKeyFinderProcessingStep
-import com.ivianuu.daggerextensions.processor.util.*
+import com.ivianuu.daggerextensions.processor.util.Module
+import com.ivianuu.daggerextensions.processor.util.getClassArrayValues
+import com.ivianuu.daggerextensions.processor.util.n
+import com.ivianuu.daggerextensions.processor.util.writeFile
 import com.squareup.javapoet.ClassName
 import javax.annotation.processing.ProcessingEnvironment
 import javax.inject.Scope
 import javax.lang.model.element.Element
-import javax.lang.model.element.Modifier
-import javax.lang.model.element.TypeElement
+import javax.lang.model.element.ExecutableElement
+import javax.tools.Diagnostic
 
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-class AutoContributeProcessingStep(
+class ContributeInjectorProcessingStep(
     private val processingEnv: ProcessingEnvironment,
     private val keyFinder: InjectorKeyFinderProcessingStep
 ) : BasicAnnotationProcessor.ProcessingStep {
@@ -44,8 +45,9 @@ class AutoContributeProcessingStep(
     override fun process(elementsByAnnotation: SetMultimap<Class<out Annotation>, Element>): MutableSet<Element> {
         val deferred = mutableSetOf<Element>()
 
-        elementsByAnnotation[AutoContribute::class.java]
-            .filterIsInstance<TypeElement>()
+        elementsByAnnotation[ContributeInjector::class.java]
+            .asSequence()
+            .filterIsInstance<ExecutableElement>()
             .map { it to createAutoContributer(it) }
             .mapNotNull { (element, builder) ->
                 if (builder == null) {
@@ -54,70 +56,63 @@ class AutoContributeProcessingStep(
 
                 builder
             }
-            .map(AutoContributeDescriptor.Builder::build)
-            .map(::AutoContributeGenerator)
-            .map(AutoContributeGenerator::generate)
+            .map { it.build() }
+            .map { ContributeInjectorGenerator(it) }
+            .map { it.generate() }
+            .toList()
             .forEach { writeFile(processingEnv, it) }
 
         return deferred
     }
 
     override fun annotations() =
-        mutableSetOf(AutoContribute::class.java)
+        mutableSetOf(ContributeInjector::class.java)
 
-    private fun createAutoContributer(element: TypeElement): AutoContributeDescriptor.Builder? {
+    private fun createAutoContributer(element: ExecutableElement): ContributeInjectorDescriptor.Builder? {
         val isDaggerSupported = InjectorKey.DAGGER_SUPPORTED_TYPES.any {
             processingEnv.typeUtils.isAssignable(
-                element.asType(),
+                element.returnType,
                 processingEnv.elementUtils.getTypeElement(it.baseType.toString()).asType()
             )
 
         }
 
-        val type = if (isDaggerSupported) {
-            ContributionType.ANDROID_INJECTOR
-        } else {
-            ContributionType.INJECTOR
+        val injectedType = element.returnType
+
+        val key = keyFinder.keys.firstOrNull {
+            processingEnv.typeUtils.isAssignable(
+                injectedType,
+                processingEnv.elementUtils.getTypeElement(it.baseType.toString()).asType()
+            )
         }
 
-        val injectedType = element.asType()
-
-        val key = if (type == ContributionType.INJECTOR) {
-            keyFinder.keys.firstOrNull {
-                processingEnv.typeUtils.isAssignable(
-                    injectedType,
-                    processingEnv.elementUtils.getTypeElement(it.baseType.toString()).asType()
-                )
-            } ?: return null
-        } else {
-            null
+        if (key == null) {
+            processingEnv.messager.printMessage(
+                Diagnostic.Kind.ERROR,
+                "no matching binding key found for $element"
+            )
         }
 
         val builder =
-            AutoContributeDescriptor.builder(element, type, key?.baseType, key?.mapKey)
+            ContributeInjectorDescriptor.builder(
+                element,
+                key?.baseType,
+                key?.mapKey
+            )
 
         processingEnv.n { "create auto contribute for ${element.simpleName}" }
 
         AnnotationMirrors.getAnnotatedAnnotations(element, Scope::class.java)
             .forEach { builder.addScope(it) }
 
-        val annotation = MoreElements.getAnnotationMirror(element, AutoContribute::class.java).get()
+        val annotation =
+            MoreElements.getAnnotationMirror(element, ContributeInjector::class.java).get()
 
         annotation.getClassArrayValues(
             "modules")
             .map { processingEnv.elementUtils.getTypeElement(it) }
             .map { Module(ClassName.get(it), it.modifiers) }
             .forEach { builder.addModule(it) }
-
-        // auto include binding modules
-        if (MoreElements.isAnnotationPresent(element, BindsTo::class.java)
-            || AnnotationMirrors.getAnnotatedAnnotations(element, BindingSet::class.java).isNotEmpty()) {
-            builder.addModule(
-                Module(
-                    element.bindsToName(), setOf(Modifier.PUBLIC, Modifier.ABSTRACT)
-                )
-            )
-        }
 
         return builder
     }

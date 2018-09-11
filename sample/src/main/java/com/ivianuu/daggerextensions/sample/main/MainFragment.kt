@@ -3,15 +3,10 @@ package com.ivianuu.daggerextensions.sample.main
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentActivity
-import com.ivianuu.daggerextensions.AutoContribute
 import com.ivianuu.daggerextensions.sample.child.ChildFragment
 import com.ivianuu.daggerextensions.sample.deps.ActivityDependency
+import com.ivianuu.daggerextensions.sample.deps.AppDependency
 import com.ivianuu.daggerextensions.sample.deps.FragmentDependency
-import com.ivianuu.daggerextensions.sample.injection.ChildFragmentBindingModule_
-import com.ivianuu.daggerextensions.sample.injection.FragmentBindingModule
-import com.ivianuu.daggerextensions.sample.injection.FragmentBindingSet
-import com.ivianuu.daggerextensions.sample.injection.PerFragment
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.AndroidSupportInjection
 import dagger.android.support.HasSupportFragmentInjector
@@ -20,15 +15,11 @@ import javax.inject.Inject
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-@FragmentBindingSet
-@PerFragment
-@FragmentBindingModule
-@AutoContribute(modules = [ChildFragmentBindingModule_::class])
 class MainFragment : Fragment(), HasSupportFragmentInjector {
 
+    @Inject lateinit var appDependency: AppDependency
     @Inject lateinit var activityDependency: ActivityDependency
     @Inject lateinit var fragmentDependency: FragmentDependency
-    @Inject lateinit var fragAct: FragmentActivity
     @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
 
     override fun onAttach(context: Context?) {

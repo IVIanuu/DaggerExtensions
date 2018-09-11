@@ -17,14 +17,28 @@
 package com.ivianuu.daggerextensions.conductor
 
 import com.bluelinelabs.conductor.Controller
-import com.ivianuu.daggerextensions.InjectorCreator
+import dagger.MapKey
+import dagger.Module
+import dagger.android.AndroidInjector
+import dagger.multibindings.Multibinds
+import kotlin.reflect.KClass
 
-@InjectorCreator([Controller::class])
-interface ControllerInjectorCreator
+@MapKey
+annotation class ControllerKey(val value: KClass<out Controller>)
+
+interface HasControllerInjector {
+    fun controllerInjector(): AndroidInjector<Controller>
+}
+
+@Module
+abstract class ControllerInjectionModule {
+    @Multibinds
+    abstract fun controllerInjectorFactories(
+    ): Map<Class<out Controller>, AndroidInjector.Factory<out Controller>>
+}
 
 object ConductorInjection {
 
-    @JvmStatic
     fun inject(controller: Controller) {
         val hasDispatchingControllerInjector = findHasControllerInjector(controller)
         val controllerInjector = hasDispatchingControllerInjector.controllerInjector()

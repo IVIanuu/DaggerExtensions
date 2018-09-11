@@ -25,9 +25,6 @@ annotation class PerActivity
 annotation class PerChildFragment
 
 @Scope
-annotation class PerController
-
-@Scope
 annotation class PerFragment
 
 @Scope

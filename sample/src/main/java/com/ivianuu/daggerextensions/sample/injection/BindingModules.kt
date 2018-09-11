@@ -1,37 +1,53 @@
-/*
- * Copyright 2018 Manuel Wrage
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.ivianuu.daggerextensions.sample.injection
 
-import com.ivianuu.daggerextensions.BindingModule
+import com.ivianuu.daggerextensions.ContributeInjector
+import com.ivianuu.daggerextensions.sample.child.ChildFragment
+import com.ivianuu.daggerextensions.sample.main.MainActivity
+import com.ivianuu.daggerextensions.sample.main.MainFragment
+import com.ivianuu.daggerextensions.sample.view.MyView
+import dagger.Module
+import dagger.android.ContributesAndroidInjector
 
-@BindingModule
-annotation class ActivityBindingModule
+/**
+ * @author Manuel Wrage (IVIanuu)
+ */
+@Module
+abstract class ActivityBindingModule {
 
-@BindingModule
-annotation class ChildFragmentBindingModule
+    @PerActivity
+    @ContributesAndroidInjector(modules = [FragmentBindingModule::class])
+    abstract fun bindMainActivity(): MainActivity
+}
 
-@BindingModule
-annotation class ControllerBindingModule
+/**
+ * @author Manuel Wrage (IVIanuu)
+ */
+@Module
+abstract class FragmentBindingModule {
 
-@BindingModule
-annotation class FragmentBindingModule
+    @PerFragment
+    @ContributesAndroidInjector(modules = [ChildFragmentBindingModule::class])
+    abstract fun bindMainFragment(): MainFragment
+}
 
-@BindingModule
-annotation class ServiceBindingModule
+@Module
+abstract class ChildFragmentBindingModule {
 
-@BindingModule
-annotation class ViewBindingModule
+    @PerChildFragment
+    @ContributesAndroidInjector(modules = [ViewModule::class])
+    abstract fun bindChildFragment(): ChildFragment
+}
+
+@Module(includes = [ViewBindingModule_BindMyView::class])
+abstract class ViewModule
+
+/**
+ * @author Manuel Wrage (IVIanuu)
+ */
+@Module
+abstract class ViewBindingModule {
+
+    @PerView
+    @ContributeInjector
+    abstract fun bindMyView(): MyView
+}

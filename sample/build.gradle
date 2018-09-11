@@ -40,7 +40,6 @@ android {
 
 dependencies {
     implementation project(':daggerextensions')
-    implementation project(':daggerextensions-conductor')
     implementation project(':daggerextensions-view')
     kapt project(':daggerextensions-compiler')
 

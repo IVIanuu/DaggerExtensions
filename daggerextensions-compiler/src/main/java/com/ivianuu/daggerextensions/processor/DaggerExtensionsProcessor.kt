@@ -18,15 +18,9 @@ package com.ivianuu.daggerextensions.processor
 
 import com.google.auto.common.BasicAnnotationProcessor
 import com.google.auto.service.AutoService
-import com.ivianuu.daggerextensions.processor.autocomponent.AutoComponentProcessingStep
-import com.ivianuu.daggerextensions.processor.autocontribute.AutoContributeProcessingStep
-import com.ivianuu.daggerextensions.processor.bindingmodule.BindingModuleProcessor
-import com.ivianuu.daggerextensions.processor.bindings.BindingsProcessingStep
-import com.ivianuu.daggerextensions.processor.injector.InjectorCreatorProcessingStep
+import com.ivianuu.daggerextensions.processor.contributeinjector.ContributeInjectorProcessingStep
 import com.ivianuu.daggerextensions.processor.injector.InjectorKeyFinderProcessingStep
-import com.ivianuu.daggerextensions.processor.multibinding.MultiBindingProcessingStep
 import javax.annotation.processing.Processor
-import javax.annotation.processing.RoundEnvironment
 import javax.lang.model.SourceVersion
 
 /**
@@ -35,23 +29,16 @@ import javax.lang.model.SourceVersion
 @AutoService(Processor::class)
 class DaggerExtensionsProcessor : BasicAnnotationProcessor() {
 
-    private val injectorKeyFinder by lazy { InjectorKeyFinderProcessingStep(processingEnv) }
-    private val bindingModuleProcessor by lazy { BindingModuleProcessor(processingEnv) }
-
     override fun initSteps(): MutableIterable<ProcessingStep> {
-        return mutableSetOf(
-                InjectorCreatorProcessingStep(processingEnv),
-            injectorKeyFinder,
-            MultiBindingProcessingStep(processingEnv),
-            AutoContributeProcessingStep(processingEnv, injectorKeyFinder),
-            BindingsProcessingStep(processingEnv),
-            AutoComponentProcessingStep(processingEnv)
-        )
-    }
+        val injectorKeyFinder = InjectorKeyFinderProcessingStep(processingEnv)
 
-    override fun postRound(roundEnv: RoundEnvironment) {
-        super.postRound(roundEnv)
-        bindingModuleProcessor.postRound(roundEnv)
+        return mutableSetOf(
+            injectorKeyFinder,
+            ContributeInjectorProcessingStep(
+                processingEnv,
+                injectorKeyFinder
+            )
+        )
     }
 
     override fun getSupportedSourceVersion(): SourceVersion = SourceVersion.latest()

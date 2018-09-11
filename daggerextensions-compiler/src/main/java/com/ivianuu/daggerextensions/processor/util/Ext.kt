@@ -17,7 +17,6 @@
 package com.ivianuu.daggerextensions.processor.util
 
 import com.google.auto.common.AnnotationMirrors.getAnnotationValue
-import com.google.common.base.CaseFormat
 import com.squareup.javapoet.JavaFile
 import com.sun.tools.javac.code.Attribute
 import java.io.IOException
@@ -46,8 +45,4 @@ fun AnnotationMirror.getClassArrayValues(name: String): List<String> {
     return (getAnnotationValue(this, name) as Attribute.Array)
         .values
         .map { it.value.toString() }
-}
-
-fun String.toLowerCaseCamel(): String {
-    return CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, this)
 }

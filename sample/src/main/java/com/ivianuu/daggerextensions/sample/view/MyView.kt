@@ -19,21 +19,23 @@ package com.ivianuu.daggerextensions.sample.view
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
-import com.ivianuu.daggerextensions.AutoContribute
+import com.ivianuu.daggerextensions.sample.deps.ActivityDependency
 import com.ivianuu.daggerextensions.sample.deps.AppDependency
-import com.ivianuu.daggerextensions.sample.injection.PerView
-import com.ivianuu.daggerextensions.sample.injection.ViewBindingModule
+import com.ivianuu.daggerextensions.sample.deps.ChildFragmentDependency
+import com.ivianuu.daggerextensions.sample.deps.FragmentDependency
+import com.ivianuu.daggerextensions.sample.deps.ViewDependency
 import com.ivianuu.daggerextensions.view.ViewInjection
 import javax.inject.Inject
 
-@ViewBindingModule
-@PerView
-@AutoContribute
 class MyView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
     @Inject lateinit var appDependency: AppDependency
+    @Inject lateinit var activityDependency: ActivityDependency
+    @Inject lateinit var fragmentDependency: FragmentDependency
+    @Inject lateinit var childFragmentDependency: ChildFragmentDependency
+    @Inject lateinit var viewDependency: ViewDependency
 
     override fun onFinishInflate() {
         super.onFinishInflate()

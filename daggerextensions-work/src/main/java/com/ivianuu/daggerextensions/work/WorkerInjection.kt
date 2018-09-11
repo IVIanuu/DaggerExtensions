@@ -17,14 +17,27 @@
 package com.ivianuu.daggerextensions.work
 
 import androidx.work.Worker
-import com.ivianuu.daggerextensions.InjectorCreator
+import dagger.MapKey
+import dagger.Module
+import dagger.android.AndroidInjector
+import dagger.multibindings.Multibinds
+import kotlin.reflect.KClass
 
-@InjectorCreator([Worker::class])
-interface WorkerInjectorCreator
+@MapKey
+annotation class WorkerKey(val value: KClass<out Worker>)
+
+interface HasWorkerInjector {
+    fun workerInjector(): AndroidInjector<Worker>
+}
+
+@Module
+abstract class WorkerInjectionModule {
+    @Multibinds
+    abstract fun workerInjectorFactories(): Map<Class<out Worker>, AndroidInjector.Factory<out Worker>>
+}
 
 object WorkerInjection {
 
-    @JvmStatic
     fun inject(worker: Worker) {
         val hasWorkerInjector = findHasWorkerInjector(worker)
         val workerInjector = hasWorkerInjector.workerInjector()

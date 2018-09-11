@@ -29,33 +29,33 @@ data class InjectorKey(
        val DAGGER_SUPPORTED_TYPES = listOf(
            // activity
            InjectorKey(
-               ClassName.bestGuess("android.app.Activity"),
-               ClassName.bestGuess("dagger.android.ActivityKey")
+               ClassName.get("android.app", "Activity"),
+               ClassName.get("dagger.android", "ActivityKey")
            ),
            // broadcast receiver
            InjectorKey(
-               ClassName.bestGuess("android.content.BroadcastReceiver"),
-               ClassName.bestGuess("dagger.android.BroadcastReceiverKey")
+               ClassName.get("android.content", "BroadcastReceiver"),
+               ClassName.get("dagger.android", "BroadcastReceiverKey")
            ),
            // content provider
            InjectorKey(
-               ClassName.bestGuess("android.content.ContentProvider"),
-               ClassName.bestGuess("dagger.android.ContentProviderKey")
+               ClassName.get("android.content", "ContentProvider"),
+               ClassName.get("dagger.android", "ContentProviderKey")
            ),
            // fragment
            InjectorKey(
-               ClassName.bestGuess("android.app.Fragment"),
-               ClassName.bestGuess("dagger.android.FragmentKey")
+               ClassName.get("android.app", "Fragment"),
+               ClassName.get("dagger.android", "FragmentKey")
            ),
            // service
            InjectorKey(
-               ClassName.bestGuess("android.app.Service"),
-               ClassName.bestGuess("dagger.android.ServiceKey")
+               ClassName.get("android.app", "Service"),
+               ClassName.get("dagger.android", "ServiceKey")
            ),
            // support fragments
            InjectorKey(
-               ClassName.bestGuess("android.support.v4.app.Fragment"),
-               ClassName.bestGuess("dagger.android.support.FragmentKey")
+               ClassName.get("android.support.v4.app", "Fragment"),
+               ClassName.get("dagger.android.support", "FragmentKey")
            )
        )
    }
